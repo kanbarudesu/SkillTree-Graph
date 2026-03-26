@@ -1,0 +1,247 @@
+# Skill Tree Graph
+
+A **node-based Skill Tree editor for Unity** that allows developers to visually create, connect, and manage skill trees directly inside the Unity Editor.
+
+---
+
+## Features
+
+### Node-Based Skill Tree Editor
+- Create skill nodes visually
+- Drag nodes freely in the graph view
+
+### Connection System
+- Connect skills to define prerequisites
+- Create branching skill paths
+
+### Add / Remove Nodes
+- Quickly create new skills
+- Delete nodes and connections easily
+
+### Undo / Redo Support
+
+
+### Save & Load
+- Save skill trees as **JSON**
+- Load previously created trees for editing
+
+### Export to ScriptableObject
+- Convert graph node data into **ScriptableObjects**
+
+### Runtime Sample
+- Ready-to-use runtime example included
+- Use it directly or build your own runtime with the provided core classes
+
+---
+
+## Preview
+
+![Skill Tree Editor Preview](./Docs/Editor-preview.gif) \
+![Runtime Progressive Mode](./Docs/Progressive-mode-preview.gif) \
+![Runtime Show All Mode](./Docs/Show-all-mode-preview.gif)
+
+---
+
+## Installation
+> ⚠️ Make sure required dependencies are installed before importing the package.
+- Download the `.unitypackage` from [GitHub Releases](https://github.com/kanbarudesu/SkillTree-Graph/releases/tag/1.0.0)
+- Open your Unity project
+- Double-click the file (or import it via **Assets > Import Package > Custom Package...**)
+- Click **Import**
+
+Note : Make sure to install 
+
+---
+### Dependencies
+
+* [DOTween](https://dotween.demigiant.com/) (Required for UI animations)
+
+---
+
+## 🎮 Keyboard Shortcuts (Skill Tree Editor)
+
+| Action             | Shortcut                  | 
+|--------------------|---------------------------|
+| Create Node        | `Ctrl + Left Click`       |
+| Save               | `Ctrl + S`                |
+| Save As            | `Ctrl + Shift + S`        |
+| Generate new Tree  | `Ctrl + N`                |
+| Pan View           | `Middle Mouse Drag`       |
+| Undo               | `Ctrl + Z`                |
+| Redo               | `Ctrl + Y`                |
+
+---
+## 🛠 Extensibility Guide
+
+This system is designed to be easily extended without modifying the core system code. You can create custom logic for effects, costs, conditions, animations, and data persistence.
+
+##
+
+### 1. Extending the `SkillContext`
+The `SkillContext` is the bridge between the Skill Tree and your game world (e.g., Player Stats, Inventory). To add your game systems:
+
+* Open `SkillContext.cs`.
+* Add your system types to the constructor or create a registration method.
+
+```csharp
+public class SkillContext : ISkillContext
+{
+    public GameObject PlayerRoot { get; private set; }
+    private readonly Dictionary<Type, object> _systems = new();
+
+    public SkillContext(GameObject player)
+    {
+        PlayerRoot = player;
+        
+        // Register your game systems here so Effects/Costs can find them
+        _systems[typeof(PlayerStats)] = player.GetComponent<PlayerStats>();
+        _systems[typeof(InventorySystem)] = player.GetComponent<InventorySystem>();
+    }
+
+    public T GetSystem<T>() where T : class
+    {
+        if (_systems.TryGetValue(typeof(T), out var system))
+            return system as T;
+        return null;
+    }
+}
+```
+
+## 2. Creating Custom Skill Effects
+Effects are executed when a skill levels up.
+* Inherit from: SkillEffect
+* Logic: Override Apply(ISkillContext context, int level).
+
+```csharp
+[System.Serializable]
+public class <YourEffect> : SkillEffect
+{
+    public float SomeValue = 0.1f;
+
+    public override void Apply(ISkillContext context, int level)
+    {
+        var yourSystem = context.GetSystem<YourSystem>();
+        yourSystem.DoSomething();
+    }
+
+    public override string GetDescription(int currentLevel, bool isMaxLevel)
+    {
+        return $"Insert Your Effect Description";
+    }
+}
+```
+
+## 3. Creating Custom Unlock Conditions
+Conditions determine if a node becomes "Available" for purchase.
+* Inherit from: SkillUnlockCondition
+* Logic: Override CanUnlock(...).
+```csharp
+[System.Serializable]
+public class <YourUnlockCondition> : SkillUnlockCondition
+{
+    public string conditionId;
+
+    public override bool CanUnlock(SkillNode node, SkillTreeRuntime runtime, ISkillContext context)
+    {
+        //Implement your condition here
+        return true;
+    }
+
+    public override string GetDescription(SkillNode node, SkillTreeRuntime runtime, ISkillContext context)
+    {
+        return $"Insert your condition description";
+    }
+}
+```
+
+###4. Creating Custom Skill Costs
+Costs define the price and check if the player can afford the upgrade.
+* Inherit from: SkillCost
+* Logic: Override CanAfford and Pay.
+```csharp
+[System.Serializable]
+public class <YourSkillCost> : SkillCost
+{
+    public int Amount = 5;
+
+    public override bool CanAfford(ISkillContext context, int targetLevel)
+    {
+        return context.GetSystem<InventorySystem>().Resource >= Amount;
+    }
+
+    public override void Pay(ISkillContext context, int targetLevel)
+    {
+        context.GetSystem<InventorySystem>().Resource -= Amount;
+    }
+
+    public override string GetDescription(ISkillContext context, int targetLevel)
+    {
+        return $"Resource : {Amount}";
+    }
+}
+```
+
+## 5. Creating Custom Tween Animations
+The UI uses a modular tweening system. You can create custom DOTween animations for hover, click, or spawn effects.
+* Namespace: UITweener
+* Inherit from: UITweenAnimation
+* Logic: Override Play(RectTransform target).
+```csharp
+[System.Serializable]
+public class <YourTweenAnimation> : UITweenAnimation
+{
+    public float Strength = 10f;
+    public int Vibrato = 10;
+    public override Tween Play(RectTransform target)
+    {
+        // Generate your Tween Implementation
+        Tween = target.DOSomething(....)
+        return Tween;
+    }
+}
+
+public class YourUI : MonoBehaviour 
+{
+    [SerializeReference, SRPeeker] 
+    public UITweenAnimation <YourTweenAnimation>;
+
+    private void Start()
+    {
+        <YourTweenAnimation>.Play(transfrom as RectTransform);
+    }
+}
+
+```
+
+## 6. Implementing Custom Save Storage
+By default, the system uses PlayerPrefs. To use JSON, Steam Cloud, or a Database:
+* Implement ISkillTreeSaveStorage.
+* Inject it into the SkillTreeController.
+
+Json Example :
+```csharp
+public class JsonFileSaveStorage : ISkillTreeSaveStorage
+{
+    private string Path => Application.persistentDataPath + "/skilltree.json";
+
+    public void Save(SkillTreeSaveData saveData)
+    {
+        string json = JsonUtility.ToJson(saveData, true);
+        System.IO.File.WriteAllText(Path, json);
+    }
+
+    public SkillTreeSaveData Load()
+    {
+        if (!System.IO.File.Exists(Path)) return null;
+        return JsonUtility.FromJson<SkillTreeSaveData>(System.IO.File.ReadAllText(Path));
+    }
+}
+```
+
+## Inspector Usage
+Some custom classes above use [SerializeReference]. This means once you create a script inheriting from these base classes, they will automatically appear in the Add dropdown menus inside your SkillNode or SkillNodeUI inspector in Unity.
+
+---
+## Attribution
+
+Skill Icons used in this project are created by *Craftpix.net* and obtained from [Here](https://free-game-assets.itch.io/free-cyberpunk-game-icons-for-ui).
