@@ -1,0 +1,210 @@
+{
+    "Id": "f7bcd45e500006d46b4032b37e66f2d1",
+    "SkillTreeName": "The Bastion",
+    "nodes": [
+        {
+            "Id": "de662dc3da67b6e408e3e0291351e048",
+            "DisplayName": "Iron Will",
+            "Description": "Passively reduces all incoming physical damage",
+            "IconGuid": "4614148f9074f03428c1d3630c48ce6c",
+            "IconName": "40_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [],
+            "ChildrenIds": [
+                "3451bbd3dad4529479202f87c712ad81"
+            ],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": -150.0,
+                "y": -50.0
+            },
+            "CanvasPosition": {
+                "x": -125.0,
+                "y": 25.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "3451bbd3dad4529479202f87c712ad81",
+            "DisplayName": "Ground Slam",
+            "Description": "Strikes the earth, slowing nearby enemies.",
+            "IconGuid": "dbd4cd82b0e18ec4ea98481b4c4c5e3b",
+            "IconName": "29_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "de662dc3da67b6e408e3e0291351e048"
+            ],
+            "ChildrenIds": [
+                "28eb60a94daac70448fbb680fc037b8a"
+            ],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": -50.0,
+                "y": -50.0
+            },
+            "CanvasPosition": {
+                "x": -25.0,
+                "y": 25.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "28eb60a94daac70448fbb680fc037b8a",
+            "DisplayName": "Challenger’s Shout",
+            "Description": "Forces all enemies in a small radius to target you.",
+            "IconGuid": "2a8016f6f9c31614594af4ac48f92260",
+            "IconName": "5_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "3451bbd3dad4529479202f87c712ad81"
+            ],
+            "ChildrenIds": [
+                "4707394f0c5af584ba4cd3502adcde1f"
+            ],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 50.0,
+                "y": -50.0
+            },
+            "CanvasPosition": {
+                "x": 75.0,
+                "y": 25.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "4707394f0c5af584ba4cd3502adcde1f",
+            "DisplayName": "Shield Battery",
+            "Description": "Converts a portion of missing health into a temporary energy shield.",
+            "IconGuid": "52f9aa3919aad8b40a0dd98f2999cc32",
+            "IconName": "33_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "28eb60a94daac70448fbb680fc037b8a"
+            ],
+            "ChildrenIds": [],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 150.0,
+                "y": -50.0
+            },
+            "CanvasPosition": {
+                "x": 175.0,
+                "y": 25.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "02456c8e53b9f5641b9c079eb6bec4b3",
+            "DisplayName": "Juggernaut Charge",
+            "Description": "A forward dash that knocks aside any small enemies in the path.",
+            "IconGuid": "f454bbde621e04a4e9ca70033cebc196",
+            "IconName": "13_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [],
+            "ChildrenIds": [
+                "db8edc471dcc67a499417d2f0ab9fb4b"
+            ],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": -150.0,
+                "y": 50.0
+            },
+            "CanvasPosition": {
+                "x": -125.0,
+                "y": -75.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "db8edc471dcc67a499417d2f0ab9fb4b",
+            "DisplayName": "Retribution",
+            "Description": "Reflects blocked damage back at the attacker.",
+            "IconGuid": "6c40dfaa02b423341a0422b5316d4407",
+            "IconName": "43_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "02456c8e53b9f5641b9c079eb6bec4b3"
+            ],
+            "ChildrenIds": [
+                "cfe70dc8fabddee489771e3d9485825e"
+            ],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": -50.0,
+                "y": 50.0
+            },
+            "CanvasPosition": {
+                "x": -25.0,
+                "y": -75.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "cfe70dc8fabddee489771e3d9485825e",
+            "DisplayName": "Fortress Stance",
+            "Description": "Root yourself in place to gain massive defense and immunity to knockbacks.",
+            "IconGuid": "166a45cd556e6fd4fbc3554724a91fc7",
+            "IconName": "9_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "db8edc471dcc67a499417d2f0ab9fb4b"
+            ],
+            "ChildrenIds": [
+                "340778f45bfddaf4d86dc35c0b600727"
+            ],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 50.0,
+                "y": 50.0
+            },
+            "CanvasPosition": {
+                "x": 75.0,
+                "y": -75.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "340778f45bfddaf4d86dc35c0b600727",
+            "DisplayName": "Earthshaker",
+            "Description": "A massive leap that stuns all enemies in a wide area upon landing.",
+            "IconGuid": "7ac1d82613198cb4d844253c610c39ff",
+            "IconName": "46_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "cfe70dc8fabddee489771e3d9485825e"
+            ],
+            "ChildrenIds": [],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 25.0,
+                "y": 150.0
+            },
+            "CanvasPosition": {
+                "x": 75.0,
+                "y": -200.0
+            },
+            "NodeSize": 100.0
+        }
+    ],
+    "references": {
+        "version": 2,
+        "RefIds": []
+    }
+}

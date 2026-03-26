@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 370f8ba4243dbcc44b4fd49d744d1f82, type: 3}
+  m_Name: SkillTreeSettingData
+  m_EditorClassIdentifier: 
+  skillTreeName: Resources
+  defaultNodeSize: 50
+  initialZoom: 1
+  minZoom: 0.5
+  maxZoom: 2.5
+  zoomSpeed: 0.1
+  zoomSmoothSpeed: 10
+  panSmoothSpeed: 100
+  graphBounds:
+    serializedVersion: 2
+    x: -2000
+    y: -2000
+    width: 4000
+    height: 4000
+  enableSnap: 1
+  snapSize: 25
+  canAddSkillOnClick: 1
+  autoSaveLoad: 1

@@ -1,0 +1,210 @@
+{
+    "Id": "8aa35bf37be68084f9a8d8c6353b1396",
+    "SkillTreeName": "The Warden",
+    "nodes": [
+        {
+            "Id": "dcb30b1fee4ecb949bec861670c01f64",
+            "DisplayName": "Natural Mending",
+            "Description": "Channels the power of the earth to slowly stitch wounds and restore vitality.",
+            "IconGuid": "07c31d9b618a4af44a280aa604f97a6a",
+            "IconName": "28_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [],
+            "ChildrenIds": [
+                "29335e7eb2bfd974a8d910781e96be0f",
+                "231ea5dfc03a92e4a98caf08b2cceb85",
+                "113bd17f731b5e04aada93d88697ca5b"
+            ],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 0.0,
+                "y": -100.0
+            },
+            "CanvasPosition": {
+                "x": 25.0,
+                "y": 75.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "29335e7eb2bfd974a8d910781e96be0f",
+            "DisplayName": "Brier Patch",
+            "Description": "Summons a thicket of thorns that hinders movement and cuts those who pass through.",
+            "IconGuid": "8151bfd997bb6f44da147336e936e5c8",
+            "IconName": "25_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "dcb30b1fee4ecb949bec861670c01f64"
+            ],
+            "ChildrenIds": [
+                "ce28455ff3df0784d9fe5744ccd733d7",
+                "e8bccea5d472e394080ebfed11bc0561"
+            ],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": -100.0,
+                "y": 0.0
+            },
+            "CanvasPosition": {
+                "x": -75.0,
+                "y": -25.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "231ea5dfc03a92e4a98caf08b2cceb85",
+            "DisplayName": "Spirit Link",
+            "Description": "Binds your life force to an ally, sharing a portion of the damage they receive.",
+            "IconGuid": "0654fd4a411f6f24fa4b84010258eafa",
+            "IconName": "10_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "dcb30b1fee4ecb949bec861670c01f64"
+            ],
+            "ChildrenIds": [
+                "2fb79a041e4a2074eab7c0f60d61c1b9",
+                "999ec46097067f64b811ed4e12fb4eb2"
+            ],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 100.0,
+                "y": 0.0
+            },
+            "CanvasPosition": {
+                "x": 125.0,
+                "y": -25.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "ce28455ff3df0784d9fe5744ccd733d7",
+            "DisplayName": "Photosynthesis",
+            "Description": "Enhances energy recovery while standing in direct light or open spaces.",
+            "IconGuid": "9ee7424ed37ea7243a962c5b96476334",
+            "IconName": "49_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "29335e7eb2bfd974a8d910781e96be0f"
+            ],
+            "ChildrenIds": [],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": -250.0,
+                "y": 150.0
+            },
+            "CanvasPosition": {
+                "x": -225.0,
+                "y": -175.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "999ec46097067f64b811ed4e12fb4eb2",
+            "DisplayName": "Barkskin",
+            "Description": "Toughens the skin of yourself or an ally, making them more resistant to physical blows.",
+            "IconGuid": "52f9aa3919aad8b40a0dd98f2999cc32",
+            "IconName": "33_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "231ea5dfc03a92e4a98caf08b2cceb85"
+            ],
+            "ChildrenIds": [],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 300.0,
+                "y": 0.0
+            },
+            "CanvasPosition": {
+                "x": 325.0,
+                "y": -25.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "2fb79a041e4a2074eab7c0f60d61c1b9",
+            "DisplayName": "Wild Shape",
+            "Description": "Shifts your form into a predatory beast, replacing utility spells with melee strikes.",
+            "IconGuid": "166a45cd556e6fd4fbc3554724a91fc7",
+            "IconName": "9_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "231ea5dfc03a92e4a98caf08b2cceb85"
+            ],
+            "ChildrenIds": [],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 250.0,
+                "y": 150.0
+            },
+            "CanvasPosition": {
+                "x": 275.0,
+                "y": -175.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "e8bccea5d472e394080ebfed11bc0561",
+            "DisplayName": "Solar Flare",
+            "Description": "Calls down a beam of light that blinds enemies and illuminates dark areas.",
+            "IconGuid": "00cd8f9974b93344abe8f0e90ca8778d",
+            "IconName": "3_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "29335e7eb2bfd974a8d910781e96be0f"
+            ],
+            "ChildrenIds": [],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": -300.0,
+                "y": 0.0
+            },
+            "CanvasPosition": {
+                "x": -275.0,
+                "y": -25.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "113bd17f731b5e04aada93d88697ca5b",
+            "DisplayName": "Resurgence",
+            "Description": "A massive burst of life energy that revives fallen allies and cleanses all negative effects.",
+            "IconGuid": "8f342b659679379428f09e861899f22a",
+            "IconName": "44_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "dcb30b1fee4ecb949bec861670c01f64"
+            ],
+            "ChildrenIds": [],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": -25.0,
+                "y": 100.0
+            },
+            "CanvasPosition": {
+                "x": 25.0,
+                "y": -150.0
+            },
+            "NodeSize": 100.0
+        }
+    ],
+    "references": {
+        "version": 2,
+        "RefIds": []
+    }
+}

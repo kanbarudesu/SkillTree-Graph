@@ -1,0 +1,212 @@
+{
+    "Id": "6d1d66b25ec30b04db64699cbf01cd4e",
+    "SkillTreeName": "The Weaver",
+    "nodes": [
+        {
+            "Id": "0bb847bbb5d96de4389f6b90ce2c3fa4",
+            "DisplayName": "Mana Well",
+            "Description": "Increases mana regeneration based on current percentage of mana.",
+            "IconGuid": "d9bf0264d4291ee46a7eaad7ebf68814",
+            "IconName": "16_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [],
+            "ChildrenIds": [
+                "da93d18a7fe15bc4c9b7b36892c715a3",
+                "6063cb264fc6be24bb7f2eb08766845c",
+                "5ac872ae1e370ca41aca3bbbe2c962c2"
+            ],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "CanvasPosition": {
+                "x": 25.0,
+                "y": -25.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "da93d18a7fe15bc4c9b7b36892c715a3",
+            "DisplayName": "Overload",
+            "Description": "Temporarily doubles spell casting speed but drains health over time.",
+            "IconGuid": "93884390f2d4d3846b7187a477b14052",
+            "IconName": "2_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "0bb847bbb5d96de4389f6b90ce2c3fa4"
+            ],
+            "ChildrenIds": [
+                "3af851ab38bab994a842f2b1fd28a04f"
+            ],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 0.0,
+                "y": -150.0
+            },
+            "CanvasPosition": {
+                "x": 25.0,
+                "y": 125.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "6151a7a247911bf49b48ef7fe0488df2",
+            "DisplayName": "Chain Lightning",
+            "Description": "An electric bolt that jumps nearby enemies.",
+            "IconGuid": "a9d1472fd6c48f144a75d9b07cb19fc0",
+            "IconName": "31_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "3af851ab38bab994a842f2b1fd28a04f"
+            ],
+            "ChildrenIds": [],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 250.0,
+                "y": -50.0
+            },
+            "CanvasPosition": {
+                "x": 275.0,
+                "y": 25.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "6063cb264fc6be24bb7f2eb08766845c",
+            "DisplayName": "Arcane Missiles",
+            "Description": "Fires tracking bolts of energy at the nearest target.",
+            "IconGuid": "e18e8d5da9a825b448426d9a1c652d44",
+            "IconName": "7_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "0bb847bbb5d96de4389f6b90ce2c3fa4"
+            ],
+            "ChildrenIds": [
+                "cf7aa06d5a5b63e40b300fe9cbf44ee7"
+            ],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 0.0,
+                "y": 150.0
+            },
+            "CanvasPosition": {
+                "x": 25.0,
+                "y": -175.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "3af851ab38bab994a842f2b1fd28a04f",
+            "DisplayName": "Singularity",
+            "Description": "Creates a gravity well that pulls enemies toward its center.",
+            "IconGuid": "f454bbde621e04a4e9ca70033cebc196",
+            "IconName": "13_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "da93d18a7fe15bc4c9b7b36892c715a3"
+            ],
+            "ChildrenIds": [
+                "6151a7a247911bf49b48ef7fe0488df2"
+            ],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 150.0,
+                "y": -150.0
+            },
+            "CanvasPosition": {
+                "x": 175.0,
+                "y": 125.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "b8377feb4c31e204592c466307f02aaa",
+            "DisplayName": "Frost Nova",
+            "Description": "A ring of ice that freezes enemies in place.",
+            "IconGuid": "e8208dc06cb40c0459db35e500d17c57",
+            "IconName": "45_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "cf7aa06d5a5b63e40b300fe9cbf44ee7"
+            ],
+            "ChildrenIds": [],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": -250.0,
+                "y": 50.0
+            },
+            "CanvasPosition": {
+                "x": -225.0,
+                "y": -75.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "cf7aa06d5a5b63e40b300fe9cbf44ee7",
+            "DisplayName": "Blink",
+            "Description": "Instantly teleports a short distance toward your cursor.",
+            "IconGuid": "7ac1d82613198cb4d844253c610c39ff",
+            "IconName": "46_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "6063cb264fc6be24bb7f2eb08766845c"
+            ],
+            "ChildrenIds": [
+                "b8377feb4c31e204592c466307f02aaa"
+            ],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": -150.0,
+                "y": 150.0
+            },
+            "CanvasPosition": {
+                "x": -125.0,
+                "y": -175.0
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "5ac872ae1e370ca41aca3bbbe2c962c2",
+            "DisplayName": "Supernova",
+            "Description": "A massive explosion centered on you that vaporizes low-level projectiles.",
+            "IconGuid": "00cd8f9974b93344abe8f0e90ca8778d",
+            "IconName": "3_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [],
+            "ParentIds": [
+                "0bb847bbb5d96de4389f6b90ce2c3fa4"
+            ],
+            "ChildrenIds": [],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 150.0,
+                "y": 100.0
+            },
+            "CanvasPosition": {
+                "x": 200.0,
+                "y": -150.0
+            },
+            "NodeSize": 100.0
+        }
+    ],
+    "references": {
+        "version": 2,
+        "RefIds": []
+    }
+}

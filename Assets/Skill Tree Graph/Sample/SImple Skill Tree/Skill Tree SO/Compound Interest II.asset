@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51cdfc17179f5374dbba965121c5b930, type: 3}
+  m_Name: Compound Interest II
+  m_EditorClassIdentifier: 
+  Id: a3923c730c5ea3d459ab07d8f3f87752
+  DisplayName: Compound Interest II
+  Description: Passively generates a portion of your current resource capacity over
+    time, even while the game is idle.
+  Icon: {fileID: -8586417740124189794, guid: 9ee7424ed37ea7243a962c5b96476334, type: 3}
+  MaxLevel: 5
+  ResourcesCost:
+  - rid: 3209287020073189793
+  UnlockConditions:
+  - rid: 3209287020073189794
+  Effects: []
+  ParentIds:
+  - 740a378c048dcd74e8012342e6ae53a3
+  ChildrenIds: []
+  UiToolkitPosition: {x: -150, y: -150}
+  CanvasPosition: {x: -125, y: 125}
+  NodeSize: 50
+  references:
+    version: 2
+    RefIds:
+    - rid: 3209287020073189793
+      type: {class: SkillPointCost, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
+      data:
+        PointsRequired: 1
+    - rid: 3209287020073189794
+      type: {class: AnyParentUnlockedCondition, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
+      data: 

@@ -1,0 +1,19 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Skill%20Tree%20Graph/Scripts/Editor/UI/SkillTreeGraphWindow.uss?fileID=7433441132597879392&amp;guid=02d15838cf13c444c91cd06f844d58eb&amp;type=3#SkillTreeGraphWindow" />
+    <ui:VisualElement name="node-button" style="align-items: center; position: absolute; width: 100%; height: 100%; top: 0; left: 0; right: 0; bottom: 0;">
+        <ui:VisualElement icon-image="project://database/Assets/Sprites/Round/zebra.png?fileID=2800000&amp;guid=3c5a587270113934e903c5c44767b873&amp;type=3#zebra" name="main-button" class="custom-unity-button" style="align-items: center; justify-content: center;">
+            <ui:VisualElement name="button-icon" class="button-image" />
+        </ui:VisualElement>
+        <ui:VisualElement name="option-button-container" class="node-option-button-container" style="top: -15px;">
+            <ui:VisualElement icon-image="project://database/Assets/Sprites/Round/zebra.png?fileID=2800000&amp;guid=3c5a587270113934e903c5c44767b873&amp;type=3#zebra" name="edit-button" class="node-option-button">
+                <ui:VisualElement name="image" class="option-button-image" style="background-image: url(&quot;project://database/Assets/Skill%20Tree%20Graph/Sprites/edit.png?fileID=2800000&amp;guid=ea14b3e604b40b647a113298df654bae&amp;type=3#edit&quot;);" />
+            </ui:VisualElement>
+            <ui:VisualElement icon-image="project://database/Assets/Sprites/Round/zebra.png?fileID=2800000&amp;guid=3c5a587270113934e903c5c44767b873&amp;type=3#zebra" name="connect-button" class="node-option-button" style="align-items: center; justify-content: center; flex-shrink: 0;">
+                <ui:VisualElement name="image" class="option-button-image" style="background-image: url(&quot;project://database/Assets/Skill%20Tree%20Graph/Sprites/link.png?fileID=2800000&amp;guid=38874101080404e4d8a64a734db3e891&amp;type=3#link&quot;);" />
+            </ui:VisualElement>
+            <ui:VisualElement icon-image="project://database/Assets/Sprites/Round/zebra.png?fileID=2800000&amp;guid=3c5a587270113934e903c5c44767b873&amp;type=3#zebra" name="remove-button" class="node-option-button" style="align-items: center; justify-content: center; flex-shrink: 0;">
+                <ui:VisualElement name="image" class="option-button-image" style="background-image: url(&quot;project://database/Assets/Skill%20Tree%20Graph/Sprites/delete.png?fileID=2800000&amp;guid=4d1a62a7cfde3184d9239f119bdb91ee&amp;type=3#delete&quot;);" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

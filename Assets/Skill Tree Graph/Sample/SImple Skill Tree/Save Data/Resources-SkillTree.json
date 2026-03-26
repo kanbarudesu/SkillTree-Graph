@@ -1,0 +1,742 @@
+{
+    "Id": "60e7c049bec18f44c9309d335cedf885",
+    "SkillTreeName": "Resources",
+    "nodes": [
+        {
+            "Id": "6bfb4e39db927e14384bf221703b7370",
+            "DisplayName": "Energy",
+            "Description": "Unlock Energy Storage.",
+            "IconGuid": "388900a2d7e2f2744b13e1b195310e65",
+            "IconName": "8_0",
+            "MaxLevel": 1,
+            "ResourcesCost": [],
+            "ParentIds": [],
+            "ChildrenIds": [
+                "9678e2c67b243184781a6796e343db9d",
+                "704ab4002393b074d9e9fbbbf019d356"
+            ],
+            "UnlockConditions": [],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": -50.0,
+                "y": -50.0
+            },
+            "CanvasPosition": {
+                "x": NaN,
+                "y": NaN
+            },
+            "NodeSize": 100.0
+        },
+        {
+            "Id": "704ab4002393b074d9e9fbbbf019d356",
+            "DisplayName": "Critical Success I",
+            "Description": "Grants a small chance for any manual action to produce multiple times the standard output.",
+            "IconGuid": "0abbdde22f1a6c44eaf44aaceef8a5ac",
+            "IconName": "27_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [
+                {
+                    "rid": 1000
+                }
+            ],
+            "ParentIds": [
+                "6bfb4e39db927e14384bf221703b7370"
+            ],
+            "ChildrenIds": [
+                "4f4de31a89d1079409d39772994af2a5",
+                "6f4c2081e8fcf5440b4755990a573b18"
+            ],
+            "UnlockConditions": [
+                {
+                    "rid": 1001
+                }
+            ],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 175.0,
+                "y": -25.0
+            },
+            "CanvasPosition": {
+                "x": NaN,
+                "y": NaN
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "9678e2c67b243184781a6796e343db9d",
+            "DisplayName": "Critical Success II",
+            "Description": "Grants medium chance for any manual action to produce multiple times the standard output.",
+            "IconGuid": "166a45cd556e6fd4fbc3554724a91fc7",
+            "IconName": "9_0",
+            "MaxLevel": 3,
+            "ResourcesCost": [
+                {
+                    "rid": 1002
+                }
+            ],
+            "ParentIds": [
+                "6bfb4e39db927e14384bf221703b7370"
+            ],
+            "ChildrenIds": [
+                "1b9694b195ca3bf43b11db348d5fb391",
+                "dbb31e731fffe0f458b40c99d742832a"
+            ],
+            "UnlockConditions": [
+                {
+                    "rid": 1003
+                }
+            ],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": -225.0,
+                "y": -25.0
+            },
+            "CanvasPosition": {
+                "x": NaN,
+                "y": NaN
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "4f4de31a89d1079409d39772994af2a5",
+            "DisplayName": "Deep Pockets",
+            "Description": "Expands the maximum limit of all resource storage, allowing for longer periods of away-time.",
+            "IconGuid": "07c31d9b618a4af44a280aa604f97a6a",
+            "IconName": "28_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [
+                {
+                    "rid": 1004
+                },
+                {
+                    "rid": 1005
+                }
+            ],
+            "ParentIds": [
+                "704ab4002393b074d9e9fbbbf019d356"
+            ],
+            "ChildrenIds": [
+                "a824da8376c30b34fbfd9989c1bbc567"
+            ],
+            "UnlockConditions": [
+                {
+                    "rid": 1006
+                }
+            ],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 250.0,
+                "y": -150.0
+            },
+            "CanvasPosition": {
+                "x": NaN,
+                "y": NaN
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "6f4c2081e8fcf5440b4755990a573b18",
+            "DisplayName": "Efficiency Overdrive I",
+            "Description": "Reduces the raw cost of all future building or upgrade purchases.",
+            "IconGuid": "2a8016f6f9c31614594af4ac48f92260",
+            "IconName": "5_0",
+            "MaxLevel": 3,
+            "ResourcesCost": [
+                {
+                    "rid": 1007
+                }
+            ],
+            "ParentIds": [
+                "704ab4002393b074d9e9fbbbf019d356"
+            ],
+            "ChildrenIds": [
+                "574c9f5aaae677f408992b1791095fc7"
+            ],
+            "UnlockConditions": [
+                {
+                    "rid": 1008
+                }
+            ],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 350.0,
+                "y": -25.0
+            },
+            "CanvasPosition": {
+                "x": NaN,
+                "y": NaN
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "574c9f5aaae677f408992b1791095fc7",
+            "DisplayName": "Efficiency Overdrive II",
+            "Description": "Reduces the more raw cost of all future building or upgrade purchases.",
+            "IconGuid": "f454bbde621e04a4e9ca70033cebc196",
+            "IconName": "13_0",
+            "MaxLevel": 2,
+            "ResourcesCost": [
+                {
+                    "rid": 1009
+                }
+            ],
+            "ParentIds": [
+                "6f4c2081e8fcf5440b4755990a573b18"
+            ],
+            "ChildrenIds": [
+                "8c93383dae41d5b41bdc5c377012ab55"
+            ],
+            "UnlockConditions": [
+                {
+                    "rid": 1010
+                }
+            ],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 250.0,
+                "y": 100.0
+            },
+            "CanvasPosition": {
+                "x": NaN,
+                "y": NaN
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "8c93383dae41d5b41bdc5c377012ab55",
+            "DisplayName": "Time Warp",
+            "Description": "Increases the overall speed of the game's internal clock, making all timers and productions run faster.",
+            "IconGuid": "ecd8a592f1690594d9955f570c2f39b0",
+            "IconName": "4_0",
+            "MaxLevel": 1,
+            "ResourcesCost": [
+                {
+                    "rid": 1011
+                }
+            ],
+            "ParentIds": [
+                "574c9f5aaae677f408992b1791095fc7"
+            ],
+            "ChildrenIds": [],
+            "UnlockConditions": [
+                {
+                    "rid": 1012
+                }
+            ],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 100.0,
+                "y": 100.0
+            },
+            "CanvasPosition": {
+                "x": NaN,
+                "y": NaN
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "dbb31e731fffe0f458b40c99d742832a",
+            "DisplayName": "Prestige Insight",
+            "Description": "Increases the amount of special currency earned.",
+            "IconGuid": "7ac1d82613198cb4d844253c610c39ff",
+            "IconName": "46_0",
+            "MaxLevel": 3,
+            "ResourcesCost": [
+                {
+                    "rid": 1013
+                },
+                {
+                    "rid": 1014
+                }
+            ],
+            "ParentIds": [
+                "9678e2c67b243184781a6796e343db9d"
+            ],
+            "ChildrenIds": [
+                "740a378c048dcd74e8012342e6ae53a3"
+            ],
+            "UnlockConditions": [
+                {
+                    "rid": 1015
+                }
+            ],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": -400.0,
+                "y": -25.0
+            },
+            "CanvasPosition": {
+                "x": NaN,
+                "y": NaN
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "740a378c048dcd74e8012342e6ae53a3",
+            "DisplayName": "Resource Recycling",
+            "Description": "Provides a chance to refund a portion of the materials spent when purchasing an upgrade.",
+            "IconGuid": "4614148f9074f03428c1d3630c48ce6c",
+            "IconName": "40_0",
+            "MaxLevel": 3,
+            "ResourcesCost": [
+                {
+                    "rid": 1016
+                }
+            ],
+            "ParentIds": [
+                "dbb31e731fffe0f458b40c99d742832a"
+            ],
+            "ChildrenIds": [
+                "a3923c730c5ea3d459ab07d8f3f87752"
+            ],
+            "UnlockConditions": [
+                {
+                    "rid": 1017
+                }
+            ],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": -300.0,
+                "y": -150.0
+            },
+            "CanvasPosition": {
+                "x": NaN,
+                "y": NaN
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "a3923c730c5ea3d459ab07d8f3f87752",
+            "DisplayName": "Compound Interest II",
+            "Description": "Passively generates a portion of your current resource capacity over time, even while the game is idle.",
+            "IconGuid": "9ee7424ed37ea7243a962c5b96476334",
+            "IconName": "49_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [
+                {
+                    "rid": 1018
+                }
+            ],
+            "ParentIds": [
+                "740a378c048dcd74e8012342e6ae53a3"
+            ],
+            "ChildrenIds": [],
+            "UnlockConditions": [
+                {
+                    "rid": 1019
+                }
+            ],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": -150.0,
+                "y": -150.0
+            },
+            "CanvasPosition": {
+                "x": NaN,
+                "y": NaN
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "1b9694b195ca3bf43b11db348d5fb391",
+            "DisplayName": "Synergy Link",
+            "Description": "Boosts the effectiveness of early-game generators based on how many late-game structures you own.",
+            "IconGuid": "0654fd4a411f6f24fa4b84010258eafa",
+            "IconName": "10_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [
+                {
+                    "rid": 1020
+                }
+            ],
+            "ParentIds": [
+                "9678e2c67b243184781a6796e343db9d"
+            ],
+            "ChildrenIds": [
+                "6b48a302340db5b45aa787c095b84bcf"
+            ],
+            "UnlockConditions": [
+                {
+                    "rid": 1021
+                }
+            ],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": -300.0,
+                "y": 100.0
+            },
+            "CanvasPosition": {
+                "x": NaN,
+                "y": NaN
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "6b48a302340db5b45aa787c095b84bcf",
+            "DisplayName": "Compound Interest I",
+            "Description": "Passively generates a portion of your current resource capacity over time, even while the game is idle.",
+            "IconGuid": "6c231fb0688f5464bbc98fb35f0a933b",
+            "IconName": "41_0",
+            "MaxLevel": 5,
+            "ResourcesCost": [
+                {
+                    "rid": 1022
+                }
+            ],
+            "ParentIds": [
+                "1b9694b195ca3bf43b11db348d5fb391"
+            ],
+            "ChildrenIds": [],
+            "UnlockConditions": [
+                {
+                    "rid": 1023
+                }
+            ],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": -150.0,
+                "y": 100.0
+            },
+            "CanvasPosition": {
+                "x": NaN,
+                "y": NaN
+            },
+            "NodeSize": 50.0
+        },
+        {
+            "Id": "a824da8376c30b34fbfd9989c1bbc567",
+            "DisplayName": "Automated Assembly",
+            "Description": "Gain Energy each second.",
+            "IconGuid": "93884390f2d4d3846b7187a477b14052",
+            "IconName": "2_0",
+            "MaxLevel": 3,
+            "ResourcesCost": [
+                {
+                    "rid": 1024
+                },
+                {
+                    "rid": 1025
+                }
+            ],
+            "ParentIds": [
+                "4f4de31a89d1079409d39772994af2a5"
+            ],
+            "ChildrenIds": [],
+            "UnlockConditions": [
+                {
+                    "rid": 1026
+                }
+            ],
+            "Effects": [],
+            "UiToolkitPosition": {
+                "x": 100.0,
+                "y": -150.0
+            },
+            "CanvasPosition": {
+                "x": NaN,
+                "y": NaN
+            },
+            "NodeSize": 50.0
+        }
+    ],
+    "references": {
+        "version": 2,
+        "RefIds": [
+            {
+                "rid": 1000,
+                "type": {
+                    "class": "CurrencyCost",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "CurrencyId": "Energy",
+                    "BaseCost": 100,
+                    "CostMultiplierPerLevel": 50
+                }
+            },
+            {
+                "rid": 1001,
+                "type": {
+                    "class": "AnyParentUnlockedCondition",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {}
+            },
+            {
+                "rid": 1002,
+                "type": {
+                    "class": "CurrencyCost",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "CurrencyId": "Energy",
+                    "BaseCost": 100,
+                    "CostMultiplierPerLevel": 50
+                }
+            },
+            {
+                "rid": 1003,
+                "type": {
+                    "class": "AnyParentUnlockedCondition",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {}
+            },
+            {
+                "rid": 1004,
+                "type": {
+                    "class": "CurrencyCost",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "CurrencyId": "Energy",
+                    "BaseCost": 100,
+                    "CostMultiplierPerLevel": 50
+                }
+            },
+            {
+                "rid": 1005,
+                "type": {
+                    "class": "SkillPointCost",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "PointsRequired": 1
+                }
+            },
+            {
+                "rid": 1006,
+                "type": {
+                    "class": "AnyParentAtLevelCondition",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "RequiredLevel": 3
+                }
+            },
+            {
+                "rid": 1007,
+                "type": {
+                    "class": "CurrencyCost",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "CurrencyId": "Energy",
+                    "BaseCost": 100,
+                    "CostMultiplierPerLevel": 50
+                }
+            },
+            {
+                "rid": 1008,
+                "type": {
+                    "class": "AnyParentUnlockedCondition",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {}
+            },
+            {
+                "rid": 1009,
+                "type": {
+                    "class": "SkillPointCost",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "PointsRequired": 1
+                }
+            },
+            {
+                "rid": 1010,
+                "type": {
+                    "class": "AnyParentAtLevelCondition",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "RequiredLevel": 3
+                }
+            },
+            {
+                "rid": 1011,
+                "type": {
+                    "class": "SkillPointCost",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "PointsRequired": 1
+                }
+            },
+            {
+                "rid": 1012,
+                "type": {
+                    "class": "AnyParentUnlockedCondition",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {}
+            },
+            {
+                "rid": 1013,
+                "type": {
+                    "class": "CurrencyCost",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "CurrencyId": "Energy",
+                    "BaseCost": 100,
+                    "CostMultiplierPerLevel": 50
+                }
+            },
+            {
+                "rid": 1014,
+                "type": {
+                    "class": "SkillPointCost",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "PointsRequired": 1
+                }
+            },
+            {
+                "rid": 1015,
+                "type": {
+                    "class": "AnyParentUnlockedCondition",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {}
+            },
+            {
+                "rid": 1016,
+                "type": {
+                    "class": "SkillPointCost",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "PointsRequired": 1
+                }
+            },
+            {
+                "rid": 1017,
+                "type": {
+                    "class": "AnyParentAtLevelCondition",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "RequiredLevel": 3
+                }
+            },
+            {
+                "rid": 1018,
+                "type": {
+                    "class": "SkillPointCost",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "PointsRequired": 1
+                }
+            },
+            {
+                "rid": 1019,
+                "type": {
+                    "class": "AnyParentUnlockedCondition",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {}
+            },
+            {
+                "rid": 1020,
+                "type": {
+                    "class": "CurrencyCost",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "CurrencyId": "Energy",
+                    "BaseCost": 100,
+                    "CostMultiplierPerLevel": 50
+                }
+            },
+            {
+                "rid": 1021,
+                "type": {
+                    "class": "AnyParentAtLevelCondition",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "RequiredLevel": 3
+                }
+            },
+            {
+                "rid": 1022,
+                "type": {
+                    "class": "SkillPointCost",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "PointsRequired": 1
+                }
+            },
+            {
+                "rid": 1023,
+                "type": {
+                    "class": "AnyParentUnlockedCondition",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {}
+            },
+            {
+                "rid": 1024,
+                "type": {
+                    "class": "CurrencyCost",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "CurrencyId": "Energy",
+                    "BaseCost": 100,
+                    "CostMultiplierPerLevel": 50
+                }
+            },
+            {
+                "rid": 1025,
+                "type": {
+                    "class": "SkillPointCost",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {
+                    "PointsRequired": 1
+                }
+            },
+            {
+                "rid": 1026,
+                "type": {
+                    "class": "AnyParentUnlockedCondition",
+                    "ns": "SkillTreeGraph.Core",
+                    "asm": "SkillTreeGraph"
+                },
+                "data": {}
+            }
+        ]
+    }
+}

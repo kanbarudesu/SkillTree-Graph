@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51cdfc17179f5374dbba965121c5b930, type: 3}
+  m_Name: Energy
+  m_EditorClassIdentifier: 
+  Id: 6bfb4e39db927e14384bf221703b7370
+  DisplayName: Energy
+  Description: Unlock Energy Storage.
+  Icon: {fileID: 8288426215254106694, guid: 388900a2d7e2f2744b13e1b195310e65, type: 3}
+  MaxLevel: 1
+  ResourcesCost: []
+  UnlockConditions: []
+  Effects: []
+  ParentIds: []
+  ChildrenIds:
+  - 9678e2c67b243184781a6796e343db9d
+  - 704ab4002393b074d9e9fbbbf019d356
+  UiToolkitPosition: {x: -50, y: -50}
+  CanvasPosition: {x: 0, y: -0}
+  NodeSize: 100
+  references:
+    version: 2
+    RefIds: []

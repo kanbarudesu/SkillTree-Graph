@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51cdfc17179f5374dbba965121c5b930, type: 3}
+  m_Name: Critical Success I
+  m_EditorClassIdentifier: 
+  Id: 704ab4002393b074d9e9fbbbf019d356
+  DisplayName: Critical Success I
+  Description: Grants a small chance for any manual action to produce multiple times
+    the standard output.
+  Icon: {fileID: -5622901713081898559, guid: 0abbdde22f1a6c44eaf44aaceef8a5ac, type: 3}
+  MaxLevel: 5
+  ResourcesCost:
+  - rid: 3209287020073189801
+  UnlockConditions:
+  - rid: 3209287020073189802
+  Effects: []
+  ParentIds:
+  - 6bfb4e39db927e14384bf221703b7370
+  ChildrenIds:
+  - 4f4de31a89d1079409d39772994af2a5
+  - 6f4c2081e8fcf5440b4755990a573b18
+  UiToolkitPosition: {x: 175, y: -25}
+  CanvasPosition: {x: 200, y: -0}
+  NodeSize: 50
+  references:
+    version: 2
+    RefIds:
+    - rid: 3209287020073189801
+      type: {class: CurrencyCost, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
+      data:
+        CurrencyId: Energy
+        BaseCost: 100
+        CostMultiplierPerLevel: 50
+    - rid: 3209287020073189802
+      type: {class: AnyParentUnlockedCondition, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
+      data: 

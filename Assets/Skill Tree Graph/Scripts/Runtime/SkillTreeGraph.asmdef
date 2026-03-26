@@ -1,0 +1,20 @@
+{
+    "name": "SkillTreeGraph",
+    "rootNamespace": "SkillTreeGraph",
+    "references": [
+        "GUID:49b49c76ee64f6b41bf28ef951cb0e50",
+        "GUID:4f5dff460eba39b48ae77134ab13768f",
+        "GUID:16b8076d82c082741b181e364807e095",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:4c5292f41914dfc409d3d2f6e9a3d373"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

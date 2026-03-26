@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51cdfc17179f5374dbba965121c5b930, type: 3}
+  m_Name: Synergy Link
+  m_EditorClassIdentifier: 
+  Id: 1b9694b195ca3bf43b11db348d5fb391
+  DisplayName: Synergy Link
+  Description: Boosts the effectiveness of early-game generators based on how many
+    late-game structures you own.
+  Icon: {fileID: -5099292496197868168, guid: 0654fd4a411f6f24fa4b84010258eafa, type: 3}
+  MaxLevel: 5
+  ResourcesCost:
+  - rid: 3209287020073189791
+  UnlockConditions:
+  - rid: 3209287020073189792
+  Effects: []
+  ParentIds:
+  - 9678e2c67b243184781a6796e343db9d
+  ChildrenIds:
+  - 6b48a302340db5b45aa787c095b84bcf
+  UiToolkitPosition: {x: -300, y: 100}
+  CanvasPosition: {x: -275, y: -125}
+  NodeSize: 50
+  references:
+    version: 2
+    RefIds:
+    - rid: 3209287020073189791
+      type: {class: CurrencyCost, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
+      data:
+        CurrencyId: Energy
+        BaseCost: 100
+        CostMultiplierPerLevel: 50
+    - rid: 3209287020073189792
+      type: {class: AnyParentAtLevelCondition, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
+      data:
+        RequiredLevel: 3

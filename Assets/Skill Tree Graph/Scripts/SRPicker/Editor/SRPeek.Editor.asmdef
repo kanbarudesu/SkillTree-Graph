@@ -1,0 +1,18 @@
+{
+    "name": "SRPeek.Editor",
+    "rootNamespace": "SRPeek.Editor",
+    "references": [
+        "GUID:4f5dff460eba39b48ae77134ab13768f"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

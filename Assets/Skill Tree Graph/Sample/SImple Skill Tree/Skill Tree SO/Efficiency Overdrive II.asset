@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51cdfc17179f5374dbba965121c5b930, type: 3}
+  m_Name: Efficiency Overdrive II
+  m_EditorClassIdentifier: 
+  Id: 574c9f5aaae677f408992b1791095fc7
+  DisplayName: Efficiency Overdrive II
+  Description: Reduces the more raw cost of all future building or upgrade purchases.
+  Icon: {fileID: 8389134475083476877, guid: f454bbde621e04a4e9ca70033cebc196, type: 3}
+  MaxLevel: 2
+  ResourcesCost:
+  - rid: 3209287020073189789
+  UnlockConditions:
+  - rid: 3209287020073189790
+  Effects: []
+  ParentIds:
+  - 6f4c2081e8fcf5440b4755990a573b18
+  ChildrenIds:
+  - 8c93383dae41d5b41bdc5c377012ab55
+  UiToolkitPosition: {x: 250, y: 100}
+  CanvasPosition: {x: 275, y: -125}
+  NodeSize: 50
+  references:
+    version: 2
+    RefIds:
+    - rid: 3209287020073189789
+      type: {class: SkillPointCost, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
+      data:
+        PointsRequired: 1
+    - rid: 3209287020073189790
+      type: {class: AnyParentAtLevelCondition, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
+      data:
+        RequiredLevel: 3

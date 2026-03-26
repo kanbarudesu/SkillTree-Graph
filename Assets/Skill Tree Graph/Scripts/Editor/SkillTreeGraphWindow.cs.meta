@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 6d19e9682fa054e4bbbaaefb4f47a2d3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - SkillTreeEditorTree: {fileID: 9197481963319205126, guid: f6571445366b94b4ba6622bd2a725b3a, type: 3}
+  - NodeButtonTemplateTree: {fileID: 9197481963319205126, guid: 11b968ba8b4b62045bf77a44e5a3f5a8, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
