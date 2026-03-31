@@ -20,9 +20,6 @@ public class HoverTooltip : MonoBehaviour
     [SerializeField] private float padding = 20f;
     [SerializeField] private float maxWidth = 200f;
 
-    [Header("Animation")]
-    [SerializeField] private UITweenSequence onShow;
-
     private RectTransform _rectTransform;
 
     private readonly Vector3[] _targetCorners = new Vector3[4];
@@ -52,8 +49,6 @@ public class HoverTooltip : MonoBehaviour
 
         UpdateTooltip(title, level, description, cost);
         SetTooltipPosition(targetItem);
-
-        onShow.Play(_rectTransform);
     }
 
     public void Hide()

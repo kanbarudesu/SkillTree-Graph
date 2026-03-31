@@ -20,13 +20,6 @@ public class SkillNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private Image icon;
     [SerializeField] private Image borderImage;
 
-    [Header("Animations")]
-    [SerializeField, SerializeReference, SRPeeker] private UITweenAnimation onSpawn;
-    [SerializeField, SerializeReference, SRPeeker] private UITweenAnimation onHover;
-    [SerializeField, SerializeReference, SRPeeker] private UITweenAnimation onAvaiable;
-    [SerializeField, SerializeReference, SRPeeker] private UITweenAnimation onLevelUp;
-    [SerializeField, SerializeReference, SRPeeker] private UITweenAnimation onLevelUpFail;
-
     private SkillNode _node;
     private SkillNodeRuntimeData _nodeState;
     private SkillTreeRuntime _runtime;
@@ -49,7 +42,6 @@ public class SkillNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         button.onClick.AddListener(OnNodeClicked);
 
         SetVisualState(_nodeState.State);
-        onSpawn.Play(RectTransform);
     }
 
     private void OnDestroy()
@@ -64,9 +56,7 @@ public class SkillNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         EventManager.TriggerEvent(new RequestNodeLevelUpEvent
         {
-            NodeId = _node.Id,
-            OnSuccess = () => { onLevelUp.Play(RectTransform); },
-            OnFail = message => { onLevelUpFail.Play(RectTransform); }
+            NodeId = _node.Id
         });
     }
 
@@ -98,14 +88,10 @@ public class SkillNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             SkillNodeState.Maxed => maxedColor,
             _ => borderImage.color
         };
-
-        if (state == SkillNodeState.Available)
-            onAvaiable.Play(RectTransform);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        onHover.Play(RectTransform);
         ShowTooltip();
     }
 

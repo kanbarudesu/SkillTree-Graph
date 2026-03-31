@@ -22,17 +22,14 @@ namespace UITweener
 
         public Sequence Play(RectTransform target)
         {
-            if (sequence != null && sequence.IsActive() && PlayMode == TweenPlayMode.Replace)
-            {
-                sequence.Kill();
-                sequence = null;
-            }
+            if (sequence != null && sequence.IsActive())
+                return null;
 
-            sequence ??= DOTween.Sequence();
+            sequence = DOTween.Sequence();
 
             foreach (var anim in Animations)
             {
-                if (anim.Tween == null) continue;
+                if (!anim.CanPlay()) continue;
 
                 if (PlayMode == TweenPlayMode.Parallel)
                     sequence.Join(anim.Play(target));
