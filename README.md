@@ -42,19 +42,22 @@ A **node-based Skill Tree editor for Unity** that allows developers to visually 
 
 ---
 
-## Installation
-> ⚠️ Make sure required dependencies are installed before importing the package.
-- Download the `.unitypackage` from [GitHub Releases](https://github.com/kanbarudesu/SkillTree-Graph/releases/tag/1.0.0)
+## Setup
+
+### Requirements
+- Unity 6.0 or Later
+
+### Installation
+- Download the `.unitypackage` from [GitHub Releases](https://github.com/kanbarudesu/SkillTree-Graph/releases/)
 - Open your Unity project
 - Double-click the file (or import it via **Assets > Import Package > Custom Package...**)
 - Click **Import**
 
-Note : Make sure to install 
 
 ---
 ### Dependencies
 
-* [DOTween](https://dotween.demigiant.com/) (Required for UI animations)
+* [DOTween](https://dotween.demigiant.com/) (Required for UI animations) (**optional**)
 
 ---
 
@@ -183,7 +186,6 @@ public class <YourSkillCost> : SkillCost
 
 ## 5. Creating Custom Tween Animations
 The UI uses a modular tweening system. You can create custom DOTween animations for hover, click, or spawn effects.
-* Namespace: UITweener
 * Inherit from: UITweenAnimation
 * Logic: Override Play(RectTransform target).
 ```csharp
