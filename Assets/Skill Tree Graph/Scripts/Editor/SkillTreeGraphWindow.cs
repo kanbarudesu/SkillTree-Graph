@@ -1,4 +1,3 @@
-using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -128,7 +127,7 @@ namespace SkillTreeGraph.Editor
             _controllerContext.NodeCreation = new GraphNodeCreationController(_graphContext, _controllerContext, _undoManager, NodeButtonTemplateTree);
             _controllerContext.ConnectionRenderer = new GraphConnectionController(_graphContext);
             _controllerContext.Interaction = new GraphInteractionController(_controllerContext.ConnectionRenderer, _undoManager);
-            _controllerContext.Selection = new GraphSelectionController(_graphContext);
+            _controllerContext.Selection = new GraphSelectionController(_graphContext, _controllerContext);
             _controllerContext.NodeOptionController = new NodeOptionButtonController(_controllerContext, _undoManager);
             _controllerContext.SaveLoad = new SkillSaveLoadController(_graphContext, _controllerContext);
 

@@ -5,6 +5,8 @@ namespace SkillTreeGraph.Editor
 {
     public class GraphSelectionController
     {
+        private GraphControllerContext _controllerContext;
+
         private VisualElement _background;
         private VisualElement _selectedNode;
         private VisualElement _selectedOptionContainer;
@@ -12,8 +14,9 @@ namespace SkillTreeGraph.Editor
 
         public VisualElement SelectedNode => _selectedNode;
 
-        public GraphSelectionController(GraphContext context)
+        public GraphSelectionController(GraphContext context, GraphControllerContext controllerContext)
         {
+            _controllerContext = controllerContext;
             _background = context.GridBackground;
             _inspectorPanel = context.Root.Q<VisualElement>("node-inspector-panel");
             RegisterBackgroundClick();
@@ -29,6 +32,7 @@ namespace SkillTreeGraph.Editor
             if (evt.target == _background)
             {
                 ClearSelection();
+                _controllerContext.Interaction.ExitMode();
                 _background.Focus();
             }
         }
