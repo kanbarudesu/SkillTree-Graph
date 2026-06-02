@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UITweener;
 using System.Linq;
 using GameEvents;
 using SkillTreeGraph.Core;
@@ -12,6 +11,7 @@ public class SkillNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private TreeRevealMode revealMode = TreeRevealMode.Progressive;
     [SerializeField] private Color lockedColor;
     [SerializeField] private Color availableColor;
+    [SerializeField] private Color cantAffordColor;
     [SerializeField] private Color unlockedColor;
     [SerializeField] private Color maxedColor;
 
@@ -24,6 +24,8 @@ public class SkillNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private SkillNodeRuntimeData _nodeState;
     private SkillTreeRuntime _runtime;
     private ISkillContext _context;
+
+    private bool _wasAffordable;
 
     private bool isMaxLevel => _nodeState.CurrentLevel == _node.MaxLevel;
     public RectTransform RectTransform => transform as RectTransform;
@@ -41,7 +43,7 @@ public class SkillNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         this.StartListening<NodeLevelUpEvent>();
         button.onClick.AddListener(OnNodeClicked);
 
-        SetVisualState(_nodeState.State);
+        RefreshDisplay(_nodeState.State);
     }
 
     private void OnDestroy()
@@ -52,33 +54,18 @@ public class SkillNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         button.onClick.RemoveListener(OnNodeClicked);
     }
 
-    private void OnNodeClicked()
-    {
-        EventManager.TriggerEvent(new RequestNodeLevelUpEvent
-        {
-            NodeId = _node.Id
-        });
-    }
+    private void OnNodeClicked() => EventManager.TriggerEvent(new RequestNodeLevelUpEvent { NodeId = _node.Id, });
 
-    public void OnEvent(NodeStateChangedEvent eventData)
+    private void RefreshDisplay(SkillNodeState state)
     {
-        if (_node != null && eventData.NodeId == _node.Id)
+        bool canAfford = CanAfford();
+        bool isCurrentlyAffordable = (state == SkillNodeState.Available || state == SkillNodeState.Unlocked) && canAfford;
+
+        if (isCurrentlyAffordable != _wasAffordable)
         {
-            SetVisualState(eventData.NewState);
+            //Play animation if needed here when the node becomes not affordable
+            _wasAffordable = isCurrentlyAffordable;
         }
-    }
-
-    public void OnEvent(NodeLevelUpEvent eventData)
-    {
-        if (_node != null && eventData.NodeId == _node.Id)
-            ShowTooltip();
-    }
-
-    private void SetVisualState(SkillNodeState state)
-    {
-        icon.overrideSprite = state == SkillNodeState.Locked
-                            && revealMode != TreeRevealMode.ShowAll
-                            ? icon.overrideSprite : _node.Icon;
 
         borderImage.color = state switch
         {
@@ -88,11 +75,19 @@ public class SkillNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             SkillNodeState.Maxed => maxedColor,
             _ => borderImage.color
         };
+
+        if (!canAfford && state != SkillNodeState.Locked && state != SkillNodeState.Maxed)
+            borderImage.color = cantAffordColor;
+
+        icon.overrideSprite = state == SkillNodeState.Locked && revealMode != TreeRevealMode.ShowAll ? icon.overrideSprite : _node.Icon;
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    private bool CanAfford()
     {
-        ShowTooltip();
+        foreach (var cost in _node.ResourcesCost)
+            if (!cost.CanAfford(_context, _nodeState, _nodeState.CurrentLevel + 1))
+                return false;
+        return true;
     }
 
     private void ShowTooltip()
@@ -108,25 +103,42 @@ public class SkillNodeUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         string title = _node.DisplayName;
         string level = $"Level {_nodeState.CurrentLevel + "/" + _node.MaxLevel}";
-        string description = _node.Description + "\n\n" + GetNodeEffectsDescription();
-        string cost = isMaxLevel ? "" : "\n" + GetNodeResourcesCostDescription();
+        string description = _node.Description + "\n" + GetNodeEffectsDescription();
+        string cost = isMaxLevel ? "" : GetNodeResourcesCostDescription();
 
         HoverTooltip.Instance.Show(RectTransform, title, level, description, cost);
+    }
+
+    private string GetNodeEffectsDescription()
+    {
+        return string.Join("\n", _node.Effects.Select(effect => effect.GetDescription(_context, _nodeState.CurrentLevel, isMaxLevel)));
+    }
+
+    private string GetNodeResourcesCostDescription()
+    {
+        string requirement = string.Join("\n", _node.ResourcesCost.Select(cost => cost.GetDescription(_context, _nodeState, _nodeState.CurrentLevel + 1)));
+        return string.IsNullOrEmpty(requirement) ? "" : $"Require : {requirement}";
+    }
+
+    public void OnEvent(NodeStateChangedEvent eventData)
+    {
+        if (_node != null && eventData.NodeId == _node.Id)
+            RefreshDisplay(eventData.NewState);
+    }
+
+    public void OnEvent(NodeLevelUpEvent eventData)
+    {
+        if (_node != null && eventData.NodeId == _node.Id)
+            ShowTooltip();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+            ShowTooltip();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         HoverTooltip.Instance.Hide();
-    }
-
-    private string GetNodeEffectsDescription()
-    {
-        return string.Join("\n", _node.Effects.Select(effect => effect.GetDescription(_nodeState.CurrentLevel, isMaxLevel)));
-    }
-
-    private string GetNodeResourcesCostDescription()
-    {
-        string requirement = string.Join("\n", _node.ResourcesCost.Select(cost => cost.GetDescription(_context, _nodeState.CurrentLevel + 1)));
-        return string.IsNullOrEmpty(requirement) ? "" : $"Require : {requirement}";
     }
 }

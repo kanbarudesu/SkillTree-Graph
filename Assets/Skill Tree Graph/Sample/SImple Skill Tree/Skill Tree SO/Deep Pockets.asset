@@ -16,13 +16,13 @@ MonoBehaviour:
   DisplayName: Deep Pockets
   Description: Expands the maximum limit of all resource storage, allowing for longer
     periods of away-time.
-  Icon: {fileID: -796155573255488767, guid: 07c31d9b618a4af44a280aa604f97a6a, type: 3}
+  Icon: {fileID: 21300000, guid: 07c31d9b618a4af44a280aa604f97a6a, type: 3}
   MaxLevel: 5
   ResourcesCost:
-  - rid: 3209287020073189795
-  - rid: 3209287020073189796
+  - rid: 6086813965064077643
+  - rid: 6086813965064077644
   UnlockConditions:
-  - rid: 3209287020073189797
+  - rid: 6086813965064077645
   Effects: []
   ParentIds:
   - 704ab4002393b074d9e9fbbbf019d356
@@ -34,17 +34,17 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 3209287020073189795
+    - rid: 6086813965064077643
       type: {class: CurrencyCost, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data:
         CurrencyId: Energy
         BaseCost: 100
         CostMultiplierPerLevel: 50
-    - rid: 3209287020073189796
+    - rid: 6086813965064077644
       type: {class: SkillPointCost, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data:
         PointsRequired: 1
-    - rid: 3209287020073189797
+    - rid: 6086813965064077645
       type: {class: AnyParentAtLevelCondition, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data:
         RequiredLevel: 3

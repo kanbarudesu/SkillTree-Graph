@@ -8,8 +8,8 @@ namespace SkillTreeGraph.Editor
     {
         private GraphContext _graphContext;
         private GraphControllerContext _controllerContext;
-        private SkillNode _node;
 
+        private SkillNode _node;
         private SkillNodeView _nodeView;
         private Vector2 _nodePosition;
 

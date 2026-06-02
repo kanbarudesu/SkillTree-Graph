@@ -15,7 +15,7 @@ MonoBehaviour:
   Id: 6bfb4e39db927e14384bf221703b7370
   DisplayName: Energy
   Description: Unlock Energy Storage.
-  Icon: {fileID: 8288426215254106694, guid: 388900a2d7e2f2744b13e1b195310e65, type: 3}
+  Icon: {fileID: 21300000, guid: 9ee7424ed37ea7243a962c5b96476334, type: 3}
   MaxLevel: 1
   ResourcesCost: []
   UnlockConditions: []

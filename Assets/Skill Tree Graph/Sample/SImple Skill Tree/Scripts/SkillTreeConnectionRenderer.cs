@@ -4,209 +4,181 @@ using UnityEngine.UI;
 
 public class SkillTreeConnectionRenderer : MaskableGraphic
 {
-    private class Connection
+    private struct ConnectionData
     {
         public RectTransform From;
         public RectTransform To;
-
         public float StartTime;
-        public float Duration;
-        public float Progress;
         public bool IsAnimating;
-
-        public bool Dirty;
-
-        public Vector2[] CurvePoints;
-    }
-
-    private enum ConnectionMode
-    {
-        Straight,
-        Bezier
+        public float Progress;
     }
 
     [Header("Settings")]
-    [SerializeField] private ConnectionMode _connectionMode;
-    [SerializeField] private int _curveSegments = 20;
-    [SerializeField] private float _thickness = 6f;
-    [SerializeField] private float _animationDuration = 0.3f;
-    [SerializeField, Range(0f, 1f)] private float _curveStrength = 0.5f;
+    [SerializeField] private float thickness = 24f;
+    [SerializeField] private int curveSegments = 32;
+    [SerializeField, Range(0f, 1f)] private float curveStrength = 0.5f;
+    [SerializeField] private float animationDuration = 0.3f;
+    [SerializeField] private Texture lineTexture;
+    [SerializeField] private RectTransform viewport;
+    [SerializeField] private RectTransform container;
 
-    private readonly List<Connection> _connections = new List<Connection>(256);
+    private readonly List<ConnectionData> _connections = new(512);
+    private readonly List<int> _activeAnimationIndices = new(32);
 
-    private RectTransform _rect;
+    public override Texture mainTexture => lineTexture != null ? lineTexture : base.mainTexture;
 
-    protected override void Awake()
-    {
-        base.Awake();
-        _rect = transform as RectTransform;
-    }
+    private Vector3 _lastLocalPos;
+    private Vector3 _lastLocalScale;
 
     public void Clear()
     {
         _connections.Clear();
+        _activeAnimationIndices.Clear();
         SetVerticesDirty();
     }
 
     public void AddConnection(RectTransform from, RectTransform to)
     {
-        var conn = new Connection
+        if (from == null || to == null) return;
+
+        var conn = new ConnectionData
         {
             From = from,
             To = to,
-            Duration = _animationDuration,
             StartTime = Time.time,
-            Progress = _animationDuration > 0 ? 0f : 1f,
-            IsAnimating = _animationDuration > 0,
-            Dirty = true,
-            CurvePoints = new Vector2[_curveSegments + 1]
+            IsAnimating = animationDuration > 0,
+            Progress = animationDuration > 0 ? 0f : 1f
         };
 
         _connections.Add(conn);
 
+        if (conn.IsAnimating)
+            _activeAnimationIndices.Add(_connections.Count - 1);
+
         SetVerticesDirty();
-    }
-
-    private Vector2 WorldToLocal(Vector3 world)
-    {
-        return _rect.InverseTransformPoint(world);
-    }
-
-    private Vector2 GetControlPoint(Vector2 parent, Vector2 child)
-    {
-        // Straight line mode
-        if (_connectionMode == ConnectionMode.Straight)
-            return Vector2.Lerp(parent, child, 0.5f);
-
-        // Bezier mode
-        float xDelta = child.x - parent.x;
-        float yDelta = child.y - parent.y;
-
-        if (Mathf.Abs(xDelta) < 0.01f || Mathf.Abs(yDelta) < 0.01f)
-            return Vector2.Lerp(parent, child, 0.5f);
-
-        Vector2 control = new Vector2(parent.x, child.y);
-        Vector2 mid = Vector2.Lerp(parent, child, 0.5f);
-
-        return Vector2.Lerp(mid, control, _curveStrength);
-    }
-
-    private Vector2 Bezier(Vector2 a, Vector2 b, Vector2 c, float t)
-    {
-        float rt = 1f - t;
-
-        return rt * rt * a +
-               2f * rt * t * b +
-               t * t * c;
-    }
-
-    private void UpdateCurve(Connection c)
-    {
-        Vector2 start = WorldToLocal(c.From.position);
-        Vector2 end = WorldToLocal(c.To.position);
-
-        Vector2 control = GetControlPoint(start, end);
-
-        for (int i = 0; i <= _curveSegments; i++)
-        {
-            float t = (float)i / _curveSegments;
-            c.CurvePoints[i] = Bezier(start, control, end, t);
-        }
-
-        c.Dirty = false;
     }
 
     protected override void OnPopulateMesh(VertexHelper vh)
     {
         vh.Clear();
+        if (_connections.Count == 0) return;
 
-        int vertIndex = 0;
+        Rect viewportRect = GetLocalViewportRect();
+        int vertexIndex = 0;
 
         for (int i = 0; i < _connections.Count; i++)
         {
-            var c = _connections[i];
+            var conn = _connections[i];
 
-            if (c.From == null || c.To == null)
-                continue;
+            Vector2 start = conn.From.anchoredPosition;
+            Vector2 end = conn.To.anchoredPosition;
 
-            if (c.Dirty)
-                UpdateCurve(c);
+            if (!IsVisible(start, end, viewportRect)) continue;
 
-            int maxSegment = Mathf.CeilToInt(_curveSegments * c.Progress);
-
-            if (maxSegment <= 0)
-                continue;
-
-            Vector2 prev = c.CurvePoints[0];
-
-            for (int s = 1; s <= maxSegment; s++)
-            {
-                Vector2 point = c.CurvePoints[s];
-
-                DrawSegment(vh, prev, point, ref vertIndex);
-
-                prev = point;
-            }
+            DrawBezier(vh, start, end, conn.Progress, ref vertexIndex);
         }
     }
 
-    private void DrawSegment(VertexHelper vh, Vector2 start, Vector2 end, ref int index)
+    private void DrawBezier(VertexHelper vh, Vector2 start, Vector2 end, float progress, ref int vIdx)
     {
-        Vector2 dir = (end - start).normalized;
-        Vector2 normal = new Vector2(-dir.y, dir.x) * (_thickness * 0.5f);
+        if (progress <= 0) return;
 
-        UIVertex v0 = UIVertex.simpleVert;
-        UIVertex v1 = UIVertex.simpleVert;
-        UIVertex v2 = UIVertex.simpleVert;
-        UIVertex v3 = UIVertex.simpleVert;
+        Vector2 control = GetControlPoint(start, end);
+        Vector2 prevPoint = start;
+        int segmentsToDraw = Mathf.CeilToInt(curveSegments * progress);
 
-        v0.color = color;
-        v1.color = color;
-        v2.color = color;
-        v3.color = color;
+        for (int i = 1; i <= segmentsToDraw; i++)
+        {
+            float t = i / (float)curveSegments * progress;
+            float tActual = i / (float)curveSegments;
+            if (tActual > progress) tActual = progress;
 
-        v0.position = start - normal;
-        v1.position = start + normal;
-        v2.position = end + normal;
-        v3.position = end - normal;
+            Vector2 currPoint = CalculateBezier(start, control, end, tActual);
 
-        vh.AddVert(v0);
-        vh.AddVert(v1);
-        vh.AddVert(v2);
-        vh.AddVert(v3);
+            AddLineSegment(vh, prevPoint, currPoint, ref vIdx, (i - 1f) / curveSegments, tActual);
+            prevPoint = currPoint;
 
-        vh.AddTriangle(index, index + 1, index + 2);
-        vh.AddTriangle(index, index + 2, index + 3);
-
-        index += 4;
+            if (tActual >= progress) break;
+        }
     }
 
     private void LateUpdate()
     {
-        bool dirtyMesh = false;
-
-        for (int i = 0; i < _connections.Count; i++)
+        if (container != null)
         {
-            var c = _connections[i];
-
-            if (c.IsAnimating)
+            if (container.localPosition != _lastLocalPos || container.localScale != _lastLocalScale)
             {
-                float t = (Time.time - c.StartTime) / c.Duration;
-
-                float newProgress = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t));
-
-                if (!Mathf.Approximately(newProgress, c.Progress))
-                {
-                    c.Progress = newProgress;
-                    dirtyMesh = true;
-                }
-
-                if (c.Progress >= 1f)
-                    c.IsAnimating = false;
+                _lastLocalPos = container.localPosition;
+                _lastLocalScale = container.localScale;
+                SetVerticesDirty();
             }
         }
 
-        if (dirtyMesh)
+        if (_activeAnimationIndices.Count == 0) return;
+
+        bool needsRedraw = false;
+        for (int i = _activeAnimationIndices.Count - 1; i >= 0; i--)
+        {
+            int index = _activeAnimationIndices[i];
+            var conn = _connections[index];
+
+            float elapsed = Time.time - conn.StartTime;
+            float newProgress = Mathf.Clamp01(elapsed / animationDuration);
+
+            if (!Mathf.Approximately(conn.Progress, newProgress))
+            {
+                conn.Progress = newProgress;
+                _connections[index] = conn;
+                needsRedraw = true;
+            }
+
+            if (newProgress >= 1f)
+            {
+                _activeAnimationIndices.RemoveAt(i);
+            }
+        }
+
+        if (needsRedraw)
             SetVerticesDirty();
+    }
+
+    private void AddLineSegment(VertexHelper vh, Vector2 start, Vector2 end, ref int vIdx, float u0, float u1)
+    {
+        Vector2 dir = (end - start).normalized;
+        if (dir == Vector2.zero) return;
+        Vector2 normal = new Vector2(-dir.y, dir.x) * (thickness * 0.5f);
+        vh.AddVert(start - normal, color, new Vector2(u0, 0));
+        vh.AddVert(start + normal, color, new Vector2(u0, 1));
+        vh.AddVert(end + normal, color, new Vector2(u1, 1));
+        vh.AddVert(end - normal, color, new Vector2(u1, 0));
+        vh.AddTriangle(vIdx, vIdx + 1, vIdx + 2);
+        vh.AddTriangle(vIdx, vIdx + 2, vIdx + 3);
+        vIdx += 4;
+    }
+
+    private Vector2 CalculateBezier(Vector2 p0, Vector2 p1, Vector2 p2, float t) => (1 - t) * (1 - t) * p0 + 2 * (1 - t) * t * p1 + t * t * p2;
+    private Vector2 GetControlPoint(Vector2 start, Vector2 end) => Vector2.Lerp(new Vector2(start.x, end.y), Vector2.Lerp(start, end, 0.5f), curveStrength);
+
+    private bool IsVisible(Vector2 p1, Vector2 p2, Rect view)
+    {
+        Vector2 cp = GetControlPoint(p1, p2);
+
+        float minX = Mathf.Min(p1.x, Mathf.Min(p2.x, cp.x));
+        float maxX = Mathf.Max(p1.x, Mathf.Max(p2.x, cp.x));
+        float minY = Mathf.Min(p1.y, Mathf.Min(p2.y, cp.y));
+        float maxY = Mathf.Max(p1.y, Mathf.Max(p2.y, cp.y));
+
+        float m = thickness;
+        return maxX >= view.xMin - m && minX <= view.xMax + m && maxY >= view.yMin - m && minY <= view.yMax + m;
+    }
+
+    private Rect GetLocalViewportRect()
+    {
+        if (viewport == null) return new Rect(-10000, -10000, 20000, 20000);
+        Vector3[] corners = new Vector3[4];
+        viewport.GetWorldCorners(corners);
+        Vector2 min = transform.InverseTransformPoint(corners[0]);
+        Vector2 max = transform.InverseTransformPoint(corners[2]);
+        return new Rect(min.x, min.y, max.x - min.x, max.y - min.y);
     }
 }

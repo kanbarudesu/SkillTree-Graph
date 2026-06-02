@@ -10,7 +10,7 @@ namespace SkillTreeGraph.Core
             // Apply gold gain logic
         }
 
-        public override string GetDescription(int currentLevel, bool isMaxLevel)
+        public override string GetDescription(ISkillContext context, int currentLevel, bool isMaxLevel)
         {
             if (isMaxLevel)
                 return $"Gold {Value * currentLevel}";

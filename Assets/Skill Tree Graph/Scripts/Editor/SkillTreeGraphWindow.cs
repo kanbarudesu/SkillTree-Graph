@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -105,6 +107,7 @@ namespace SkillTreeGraph.Editor
 
         private void InitializeWindow()
         {
+            if (_isInitialized) return;
             rootVisualElement.Clear();
             _isInitialized = true;
 
@@ -115,7 +118,23 @@ namespace SkillTreeGraph.Editor
             }
 
             _graphContext.Settings = Resources.Load<SkillTreeSettingData>("Skill Tree Data/SkillTreeSettingData");
-            if (_graphContext.Settings == null) Debug.Log("SkillTreeSettingData not found");
+            if (_graphContext.Settings == null)
+            {
+                _graphContext.Settings = CreateInstance<SkillTreeSettingData>();
+
+                string folderPath = "Assets/Resources/Skill Tree Data";
+                if (!AssetDatabase.IsValidFolder(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                    AssetDatabase.Refresh();
+                }
+
+                AssetDatabase.CreateAsset(_graphContext.Settings, $"{folderPath}/SkillTreeSettingData.asset");
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+
+                Debug.Log("Created SkillTreeSettingData.asset in " + folderPath);
+            }
 
             InitializeGraphElements();
 
@@ -127,7 +146,7 @@ namespace SkillTreeGraph.Editor
             _controllerContext.NodeCreation = new GraphNodeCreationController(_graphContext, _controllerContext, _undoManager, NodeButtonTemplateTree);
             _controllerContext.ConnectionRenderer = new GraphConnectionController(_graphContext);
             _controllerContext.Interaction = new GraphInteractionController(_controllerContext.ConnectionRenderer, _undoManager);
-            _controllerContext.Selection = new GraphSelectionController(_graphContext, _controllerContext);
+            _controllerContext.Selection = new GraphSelectionController(_graphContext);
             _controllerContext.NodeOptionController = new NodeOptionButtonController(_controllerContext, _undoManager);
             _controllerContext.SaveLoad = new SkillSaveLoadController(_graphContext, _controllerContext);
 

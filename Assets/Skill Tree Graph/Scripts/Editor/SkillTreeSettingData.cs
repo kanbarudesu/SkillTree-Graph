@@ -32,6 +32,8 @@ namespace SkillTreeGraph.Editor
         [SerializeField] private bool canAddSkillOnClick = true;
         [SerializeField] private bool autoSaveLoad = true;
 
+        [SerializeField, HideInInspector] private string lastSavePath;
+
         public string SkillTreeName => skillTreeName;
         public string Id => id;
         public float NodeSize => defaultNodeSize;
@@ -51,10 +53,14 @@ namespace SkillTreeGraph.Editor
         public bool CanAddSkillOnClick => canAddSkillOnClick;
         public bool AutoSaveLoad => autoSaveLoad;
 
+        public string LastSavePath => lastSavePath;
+
         public void SetCurrentSkillTreeSetting(string skillTreeName, string id)
         {
             this.skillTreeName = skillTreeName;
             this.id = id;
         }
+
+        public void SetLastSavePath(string path) => lastSavePath = path;
     }
 }

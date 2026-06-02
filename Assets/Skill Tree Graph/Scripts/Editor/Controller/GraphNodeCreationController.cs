@@ -54,30 +54,30 @@ namespace SkillTreeGraph.Editor
 
         private Vector2 ScreenToGraph(Vector2 mousePosition)
         {
+#if UNITY_6000_3_OR_NEWER
+            float zoom = _graphContext.GraphContent.style.scale.value.value.x;
+            Vector2 pan = new Vector2(_graphContext.GraphContent.style.translate.value.x.value, _graphContext.GraphContent.style.translate.value.y.value);
+#else
             float zoom = _graphContext.GraphContent.transform.scale.x;
             Vector2 pan = _graphContext.GraphContent.transform.position;
-
+#endif
             return (mousePosition - pan) / zoom;
         }
 
-        private void CreateNodeAt(Vector2 position)
-        {
-            var createCommand = new CreateNodeCommand(position);
-            _undoManager.ExecuteCommand(createCommand);
-        }
+        private void CreateNodeAt(Vector2 position) => _undoManager.ExecuteCommand(new CreateNodeCommand(position));
 
         private void DrawConnections(SkillNode node, SkillNodeView nodeView)
         {
             foreach (var parentID in node.ParentIds)
             {
                 var parent = _graphContext.Collection.GetNodeView(parentID);
-                _controllerContext.Interaction.RedrawConnections(parent, nodeView);
+                _controllerContext.Interaction.ConnectNode(parent, nodeView);
             }
 
             foreach (var childID in node.ChildrenIds)
             {
                 var child = _graphContext.Collection.GetNodeView(childID);
-                _controllerContext.Interaction.RedrawConnections(nodeView, child);
+                _controllerContext.Interaction.ConnectNode(nodeView, child);
             }
         }
 
@@ -110,9 +110,6 @@ namespace SkillTreeGraph.Editor
             return nodeView;
         }
 
-        public void Dispose()
-        {
-            _root.UnregisterCallback<PointerDownEvent>(OnPointerDown, TrickleDown.TrickleDown);
-        }
+        public void Dispose() => _root.UnregisterCallback<PointerDownEvent>(OnPointerDown, TrickleDown.TrickleDown);
     }
 }

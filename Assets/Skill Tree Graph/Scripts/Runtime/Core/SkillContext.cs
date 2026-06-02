@@ -31,6 +31,13 @@ namespace SkillTreeGraph.Core
             if (_systems.TryGetValue(typeof(T), out var system))
                 return system as T;
 
+            T component = PlayerRoot.GetComponentInChildren<T>();
+            if (component != null)
+            {
+                _systems[typeof(T)] = component;
+                return component;
+            }
+
             Debug.LogError($"System {typeof(T).Name} is missing from the Player!");
             return null;
         }

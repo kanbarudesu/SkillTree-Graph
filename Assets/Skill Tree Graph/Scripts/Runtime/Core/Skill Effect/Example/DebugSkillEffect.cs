@@ -9,6 +9,6 @@ namespace SkillTreeGraph.Core
         {
             Debug.Log($"Apply effect to {context.PlayerRoot.name} with level {level}");
         }
-        public override string GetDescription(int currentLevel, bool isMaxLevel) => "Debug Effect";
+        public override string GetDescription(ISkillContext context, int currentLevel, bool isMaxLevel) => "Debug Effect";
     }
 }

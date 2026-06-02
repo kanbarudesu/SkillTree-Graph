@@ -44,7 +44,7 @@ public class SkillTreeProgression : IEventListener<RequestNodeLevelUpEvent>, IDi
 
         foreach (var cost in node.ResourcesCost)
         {
-            if (!cost.CanAfford(_context, targetLevel))
+            if (!cost.CanAfford(_context, state, targetLevel))
             {
                 Debug.Log($"Cannot afford skill: {node.DisplayName}");
                 onFail?.Invoke("Resources not enough");
@@ -53,17 +53,13 @@ public class SkillTreeProgression : IEventListener<RequestNodeLevelUpEvent>, IDi
         }
 
         foreach (var cost in node.ResourcesCost)
-        {
-            cost.Pay(_context, targetLevel);
-        }
+            cost.Pay(_context, state, targetLevel);
 
         state.SetLevel(targetLevel);
         onSuccess?.Invoke();
 
         if (targetLevel >= node.MaxLevel)
             state.SetState(SkillNodeState.Maxed);
-        else
-            state.SetState(SkillNodeState.Unlocked);
 
         EvaluateUnlocks();
     }
@@ -73,22 +69,23 @@ public class SkillTreeProgression : IEventListener<RequestNodeLevelUpEvent>, IDi
         foreach (var node in _database.SkillDatabase)
         {
             var state = _runtime.GetOrCreate(node.Id);
-            if (state.State != SkillNodeState.Locked) continue;
 
-            bool canUnlock = true;
+            if (state.State == SkillNodeState.Maxed) continue;
+            
+            bool meetsConditions = true;
             foreach (var condition in node.UnlockConditions)
             {
                 if (!condition.CanUnlock(node, _runtime, _context))
                 {
-                    canUnlock = false;
+                    meetsConditions = false;
                     break;
                 }
             }
+            
+            if (!meetsConditions && state.State == SkillNodeState.Locked)
+                continue;
 
-            if (!canUnlock) continue;
-
-            state.SetState(SkillNodeState.Available);
-            EventManager.TriggerEvent(new NodeAvailableEvent { NodeId = node.Id });
+            state.SetState(state.CurrentLevel == 0 ? SkillNodeState.Available : SkillNodeState.Unlocked);
         }
     }
 }

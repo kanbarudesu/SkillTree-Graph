@@ -30,3 +30,4 @@ MonoBehaviour:
   snapSize: 25
   canAddSkillOnClick: 1
   autoSaveLoad: 1
+  lastSavePath: Assets/Skill Tree Graph/Sample/SImple Skill Tree/Save Data/Resources-SkillTree.json

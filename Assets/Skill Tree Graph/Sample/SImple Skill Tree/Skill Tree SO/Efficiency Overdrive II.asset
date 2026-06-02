@@ -15,12 +15,12 @@ MonoBehaviour:
   Id: 574c9f5aaae677f408992b1791095fc7
   DisplayName: Efficiency Overdrive II
   Description: Reduces the more raw cost of all future building or upgrade purchases.
-  Icon: {fileID: 8389134475083476877, guid: f454bbde621e04a4e9ca70033cebc196, type: 3}
+  Icon: {fileID: 21300000, guid: f454bbde621e04a4e9ca70033cebc196, type: 3}
   MaxLevel: 2
   ResourcesCost:
-  - rid: 3209287020073189789
+  - rid: 6086813965064077639
   UnlockConditions:
-  - rid: 3209287020073189790
+  - rid: 6086813965064077640
   Effects: []
   ParentIds:
   - 6f4c2081e8fcf5440b4755990a573b18
@@ -32,11 +32,11 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 3209287020073189789
+    - rid: 6086813965064077639
       type: {class: SkillPointCost, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data:
         PointsRequired: 1
-    - rid: 3209287020073189790
+    - rid: 6086813965064077640
       type: {class: AnyParentAtLevelCondition, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data:
         RequiredLevel: 3

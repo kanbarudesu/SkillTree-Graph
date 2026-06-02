@@ -206,14 +206,17 @@ namespace SkillTreeGraph.Editor
 
         private void ApplyTransform()
         {
+#if UNITY_6000_3_OR_NEWER
+            _graphContent.style.translate = new Translate(_currentPan.x, _currentPan.y, 0f);
+            _graphContent.style.scale = new StyleScale(new Vector3(_currentZoom, _currentZoom, 1f));
+#else
             _graphContent.transform.position = _currentPan;
             _graphContent.transform.scale = new Vector3(_currentZoom, _currentZoom, 1f);
-
+#endif
             _grid.Zoom = _currentZoom;
             _grid.PanOffset = _currentPan;
             _grid.MarkDirtyRepaint();
         }
-
         #endregion
     }
 }

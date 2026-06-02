@@ -92,5 +92,15 @@ namespace SkillTreeGraph.Editor
 
             return result;
         }
+
+        public static T DeepClone<T>(T source) where T : ScriptableObject
+        {
+            T clone = ScriptableObject.CreateInstance<T>();
+
+            string json = EditorJsonUtility.ToJson(source);
+            EditorJsonUtility.FromJsonOverwrite(json, clone);
+
+            return clone;
+        }
     }
 }

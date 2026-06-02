@@ -6,8 +6,8 @@
             "Id": "6bfb4e39db927e14384bf221703b7370",
             "DisplayName": "Energy",
             "Description": "Unlock Energy Storage.",
-            "IconGuid": "388900a2d7e2f2744b13e1b195310e65",
-            "IconName": "8_0",
+            "IconGuid": "9ee7424ed37ea7243a962c5b96476334",
+            "IconName": "49",
             "MaxLevel": 1,
             "ResourcesCost": [],
             "ParentIds": [],
@@ -31,8 +31,8 @@
             "Id": "704ab4002393b074d9e9fbbbf019d356",
             "DisplayName": "Critical Success I",
             "Description": "Grants a small chance for any manual action to produce multiple times the standard output.",
-            "IconGuid": "0abbdde22f1a6c44eaf44aaceef8a5ac",
-            "IconName": "27_0",
+            "IconGuid": "2a8016f6f9c31614594af4ac48f92260",
+            "IconName": "5",
             "MaxLevel": 5,
             "ResourcesCost": [
                 {
@@ -66,8 +66,8 @@
             "Id": "9678e2c67b243184781a6796e343db9d",
             "DisplayName": "Critical Success II",
             "Description": "Grants medium chance for any manual action to produce multiple times the standard output.",
-            "IconGuid": "166a45cd556e6fd4fbc3554724a91fc7",
-            "IconName": "9_0",
+            "IconGuid": "2a8016f6f9c31614594af4ac48f92260",
+            "IconName": "5",
             "MaxLevel": 3,
             "ResourcesCost": [
                 {
@@ -102,7 +102,7 @@
             "DisplayName": "Deep Pockets",
             "Description": "Expands the maximum limit of all resource storage, allowing for longer periods of away-time.",
             "IconGuid": "07c31d9b618a4af44a280aa604f97a6a",
-            "IconName": "28_0",
+            "IconName": "28",
             "MaxLevel": 5,
             "ResourcesCost": [
                 {
@@ -138,8 +138,8 @@
             "Id": "6f4c2081e8fcf5440b4755990a573b18",
             "DisplayName": "Efficiency Overdrive I",
             "Description": "Reduces the raw cost of all future building or upgrade purchases.",
-            "IconGuid": "2a8016f6f9c31614594af4ac48f92260",
-            "IconName": "5_0",
+            "IconGuid": "f454bbde621e04a4e9ca70033cebc196",
+            "IconName": "13",
             "MaxLevel": 3,
             "ResourcesCost": [
                 {
@@ -173,7 +173,7 @@
             "DisplayName": "Efficiency Overdrive II",
             "Description": "Reduces the more raw cost of all future building or upgrade purchases.",
             "IconGuid": "f454bbde621e04a4e9ca70033cebc196",
-            "IconName": "13_0",
+            "IconName": "13",
             "MaxLevel": 2,
             "ResourcesCost": [
                 {
@@ -207,7 +207,7 @@
             "DisplayName": "Time Warp",
             "Description": "Increases the overall speed of the game's internal clock, making all timers and productions run faster.",
             "IconGuid": "ecd8a592f1690594d9955f570c2f39b0",
-            "IconName": "4_0",
+            "IconName": "4",
             "MaxLevel": 1,
             "ResourcesCost": [
                 {
@@ -238,8 +238,8 @@
             "Id": "dbb31e731fffe0f458b40c99d742832a",
             "DisplayName": "Prestige Insight",
             "Description": "Increases the amount of special currency earned.",
-            "IconGuid": "7ac1d82613198cb4d844253c610c39ff",
-            "IconName": "46_0",
+            "IconGuid": "a3df235824aef2946b2c6cc241433e0f",
+            "IconName": "1",
             "MaxLevel": 3,
             "ResourcesCost": [
                 {
@@ -275,8 +275,8 @@
             "Id": "740a378c048dcd74e8012342e6ae53a3",
             "DisplayName": "Resource Recycling",
             "Description": "Provides a chance to refund a portion of the materials spent when purchasing an upgrade.",
-            "IconGuid": "4614148f9074f03428c1d3630c48ce6c",
-            "IconName": "40_0",
+            "IconGuid": "9d92595ef1b7e56408f7c1b49895e31c",
+            "IconName": "22",
             "MaxLevel": 3,
             "ResourcesCost": [
                 {
@@ -309,8 +309,8 @@
             "Id": "a3923c730c5ea3d459ab07d8f3f87752",
             "DisplayName": "Compound Interest II",
             "Description": "Passively generates a portion of your current resource capacity over time, even while the game is idle.",
-            "IconGuid": "9ee7424ed37ea7243a962c5b96476334",
-            "IconName": "49_0",
+            "IconGuid": "4614148f9074f03428c1d3630c48ce6c",
+            "IconName": "40",
             "MaxLevel": 5,
             "ResourcesCost": [
                 {
@@ -341,8 +341,8 @@
             "Id": "1b9694b195ca3bf43b11db348d5fb391",
             "DisplayName": "Synergy Link",
             "Description": "Boosts the effectiveness of early-game generators based on how many late-game structures you own.",
-            "IconGuid": "0654fd4a411f6f24fa4b84010258eafa",
-            "IconName": "10_0",
+            "IconGuid": "cdfd8b5ff7e90cc4291b3ca0dda41b04",
+            "IconName": "34",
             "MaxLevel": 5,
             "ResourcesCost": [
                 {
@@ -375,8 +375,8 @@
             "Id": "6b48a302340db5b45aa787c095b84bcf",
             "DisplayName": "Compound Interest I",
             "Description": "Passively generates a portion of your current resource capacity over time, even while the game is idle.",
-            "IconGuid": "6c231fb0688f5464bbc98fb35f0a933b",
-            "IconName": "41_0",
+            "IconGuid": "4614148f9074f03428c1d3630c48ce6c",
+            "IconName": "40",
             "MaxLevel": 5,
             "ResourcesCost": [
                 {
@@ -407,8 +407,8 @@
             "Id": "a824da8376c30b34fbfd9989c1bbc567",
             "DisplayName": "Automated Assembly",
             "Description": "Gain Energy each second.",
-            "IconGuid": "93884390f2d4d3846b7187a477b14052",
-            "IconName": "2_0",
+            "IconGuid": "d9bf0264d4291ee46a7eaad7ebf68814",
+            "IconName": "16",
             "MaxLevel": 3,
             "ResourcesCost": [
                 {

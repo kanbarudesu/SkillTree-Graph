@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GameEvents;
+using UnityEngine;
 
 namespace SkillTreeGraph.Core
 {
@@ -63,6 +64,9 @@ namespace SkillTreeGraph.Core
                 {
                     foreach (var childId in node.ChildrenIds)
                     {
+                        var childState = _runtime.GetOrCreate(childId);
+                        childState.SetNodeDepth(Mathf.Max(childState.NodeDepth, state.NodeDepth + 1));
+
                         if (!spawned.Contains(childId) && _database.TryGetNode(childId, out var child))
                         {
                             queue.Enqueue(child);
@@ -84,11 +88,13 @@ namespace SkillTreeGraph.Core
                 if (!_database.TryGetNode(eventData.NodeId, out var node)) return;
                 if (node.ChildrenIds == null) return;
 
+                var parentState = _runtime.GetOrCreate(node.Id);
                 foreach (var childId in node.ChildrenIds)
                 {
                     if (!_builder.IsSpawned(childId) && _database.TryGetNode(childId, out var child))
                     {
                         var childState = _runtime.GetOrCreate(childId);
+                        childState.SetNodeDepth(Mathf.Max(childState.NodeDepth, parentState.NodeDepth + 1));
                         _builder.SpawnNode(child, childState);
                     }
                 }

@@ -64,6 +64,11 @@ public class SkillTreeController : MonoBehaviour
         _progression.EvaluateUnlocks();
     }
 
+    public void RefreshTreeDisplay()
+    {
+        _progression.EvaluateUnlocks();
+    }
+
     public SkillTreeSaveData ExportSaveData()
     {
         return _runtimeData.ExportSaveData();

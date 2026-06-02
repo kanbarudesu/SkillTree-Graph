@@ -61,7 +61,7 @@ namespace SkillTreeGraph.Editor
             ExitMode();
         }
 
-        public void RedrawConnections(SkillNodeView parent, SkillNodeView child)
+        public void ConnectNode(SkillNodeView parent, SkillNodeView child)
         {
             if (!parent.Data.ChildrenIds.Contains(child.Data.Id))
                 parent.Data.ChildrenIds.Add(child.Data.Id);
@@ -70,6 +70,17 @@ namespace SkillTreeGraph.Editor
                 child.Data.ParentIds.Add(parent.Data.Id);
 
             _connectionRenderer.DrawConnection(parent, child);
+        }
+
+        public void DisconnectNode(SkillNodeView parent, SkillNodeView child)
+        {
+            if (parent.Data.ChildrenIds.Contains(child.Data.Id))
+                parent.Data.ChildrenIds.Remove(child.Data.Id);
+
+            if (child.Data.ParentIds.Contains(parent.Data.Id))
+                child.Data.ParentIds.Remove(parent.Data.Id);
+
+            _connectionRenderer.RemoveConnection(parent, child);
         }
     }
 }

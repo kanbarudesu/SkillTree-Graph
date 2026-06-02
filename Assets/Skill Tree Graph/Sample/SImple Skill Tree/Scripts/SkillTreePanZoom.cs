@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using SkillTreeGraph.Core;
+using UnityEngine.InputSystem;
 
 public class SkillTreePanZoom : MonoBehaviour, IDragHandler, IBeginDragHandler, IScrollHandler
 {
@@ -29,9 +29,9 @@ public class SkillTreePanZoom : MonoBehaviour, IDragHandler, IBeginDragHandler, 
 
     void CenterGraph()
     {
-        graphContainer.localScale = Vector3.one;
-        graphContainer.anchoredPosition = Vector2.zero;
         currentZoom = initialZoom;
+        graphContainer.anchoredPosition = Vector2.zero;
+        graphContainer.localScale = Vector3.one * currentZoom;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -73,7 +73,7 @@ public class SkillTreePanZoom : MonoBehaviour, IDragHandler, IBeginDragHandler, 
         Vector2 mouseLocalBefore;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             graphContainer,
-            Input.mousePosition,
+            Mouse.current.position.ReadValue(),
             null,
             out mouseLocalBefore
         );
@@ -83,7 +83,7 @@ public class SkillTreePanZoom : MonoBehaviour, IDragHandler, IBeginDragHandler, 
         Vector2 mouseLocalAfter;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             graphContainer,
-            Input.mousePosition,
+            Mouse.current.position.ReadValue(),
             null,
             out mouseLocalAfter
         );

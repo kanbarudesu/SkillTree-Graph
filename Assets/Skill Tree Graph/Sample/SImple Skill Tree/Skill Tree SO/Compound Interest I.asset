@@ -16,12 +16,12 @@ MonoBehaviour:
   DisplayName: Compound Interest I
   Description: Passively generates a portion of your current resource capacity over
     time, even while the game is idle.
-  Icon: {fileID: -8419024768148562069, guid: 6c231fb0688f5464bbc98fb35f0a933b, type: 3}
+  Icon: {fileID: 21300000, guid: 4614148f9074f03428c1d3630c48ce6c, type: 3}
   MaxLevel: 5
   ResourcesCost:
-  - rid: 3209287020073189779
+  - rid: 6086813965064077627
   UnlockConditions:
-  - rid: 3209287020073189780
+  - rid: 6086813965064077628
   Effects: []
   ParentIds:
   - 1b9694b195ca3bf43b11db348d5fb391
@@ -32,10 +32,10 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 3209287020073189779
+    - rid: 6086813965064077627
       type: {class: SkillPointCost, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data:
         PointsRequired: 1
-    - rid: 3209287020073189780
+    - rid: 6086813965064077628
       type: {class: AnyParentUnlockedCondition, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data: 

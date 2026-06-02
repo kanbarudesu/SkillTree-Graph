@@ -50,7 +50,6 @@
 .option-button-image {
     width: 65%;
     height: 65%;
-    background-image: url("project://database/Assets/Skill%20Tree%20Graph/Sprites/Icons/35.png?fileID=-164082725380277428&guid=b492c855fe7c2d34689f08eb79d32bac&type=3#35_0");
     -unity-background-image-tint-color: rgb(0, 0, 0);
 }
 
@@ -102,7 +101,7 @@
     position: absolute;
     width: 85%;
     height: 85%;
-    background-image: url("project://database/Assets/Skill%20Tree%20Graph/Sprites/Icons/35.png?fileID=-164082725380277428&guid=b492c855fe7c2d34689f08eb79d32bac&type=3#35_0");
+    background-image: url("project://database/Assets/Skill%20Tree%20Graph/Sprites/Editor%20Icon/Questionmark-White.png?fileID=2800000&guid=ffbc3e5a99e4da54db1464d9b25a037f&type=3#Questionmark-White");
     -unity-background-image-tint-color: rgb(255, 255, 255);
 }
 

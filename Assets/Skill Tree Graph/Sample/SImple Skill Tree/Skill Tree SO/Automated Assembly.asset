@@ -15,13 +15,13 @@ MonoBehaviour:
   Id: a824da8376c30b34fbfd9989c1bbc567
   DisplayName: Automated Assembly
   Description: Gain Energy each second.
-  Icon: {fileID: 6937817954938267909, guid: 93884390f2d4d3846b7187a477b14052, type: 3}
+  Icon: {fileID: 21300000, guid: d9bf0264d4291ee46a7eaad7ebf68814, type: 3}
   MaxLevel: 3
   ResourcesCost:
-  - rid: 3209287020073189798
-  - rid: 3209287020073189799
+  - rid: 6086813965064077646
+  - rid: 6086813965064077647
   UnlockConditions:
-  - rid: 3209287020073189800
+  - rid: 6086813965064077648
   Effects: []
   ParentIds:
   - 4f4de31a89d1079409d39772994af2a5
@@ -32,16 +32,16 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 3209287020073189798
+    - rid: 6086813965064077646
       type: {class: CurrencyCost, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data:
         CurrencyId: Energy
         BaseCost: 100
         CostMultiplierPerLevel: 50
-    - rid: 3209287020073189799
+    - rid: 6086813965064077647
       type: {class: SkillPointCost, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data:
         PointsRequired: 1
-    - rid: 3209287020073189800
+    - rid: 6086813965064077648
       type: {class: AnyParentUnlockedCondition, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data: 

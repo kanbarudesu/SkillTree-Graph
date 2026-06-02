@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -20,11 +21,15 @@ namespace SkillTreeGraph.Editor
         {
             var editButton = node.Q<VisualElement>("edit-button");
             var connectButton = node.Q<VisualElement>("connect-button");
+            var disconnectButton = node.Q<VisualElement>("disconnect-button");
+            var duplicateButton = node.Q<VisualElement>("duplicate-button");
             var removeButton = node.Q<VisualElement>("remove-button");
             var inspectorPanel = root.Q<VisualElement>("node-inspector-panel");
 
             editButton.RegisterCallback<PointerDownEvent>(evt => OnEditButtonClicked(node, inspectorPanel));
             connectButton.RegisterCallback<PointerDownEvent>(evt => OnConnectButtonClicked(node));
+            disconnectButton.RegisterCallback<PointerDownEvent>(evt => OnDisconnectButtonClicked(node));
+            duplicateButton.RegisterCallback<PointerDownEvent>(evt => OnDuplicateButtonClicked(node));
             removeButton.RegisterCallback<PointerDownEvent>(evt => OnRemoveButtonClicked(node, inspectorPanel));
         }
 
@@ -38,34 +43,39 @@ namespace SkillTreeGraph.Editor
             };
         }
 
-        private void OnEditButtonClicked(SkillNodeView node, VisualElement inspectorPanel)
+        private void OnEditButtonClicked(SkillNodeView nodeView, VisualElement inspectorPanel)
         {
             inspectorPanel.Clear();
-            inspectorPanel.Add(BuildNodeInspector(node));
+            inspectorPanel.Add(BuildNodeInspector(nodeView));
             inspectorPanel.RemoveFromClassList("panel-exit");
         }
 
-        private void OnConnectButtonClicked(SkillNodeView node)
+        private void OnConnectButtonClicked(SkillNodeView nodeView)
         {
             _controllerContext.Interaction.EnterConnectMode();
-            _controllerContext.Interaction.OnNodeClicked(node);
+            _controllerContext.Interaction.OnNodeClicked(nodeView);
         }
 
-        private void OnRemoveButtonClicked(SkillNodeView node, VisualElement inspectorPanel)
+        private void OnDisconnectButtonClicked(SkillNodeView nodeView)
         {
-            RemoveNode(node);
+            if (nodeView.Data.ChildrenIds.Count == 0 && nodeView.Data.ParentIds.Count == 0) return;
+            _undoManager.ExecuteCommand(new DisconnectNodeCommand(nodeView.Data.Id));
+        }
+
+        private void OnDuplicateButtonClicked(SkillNodeView nodeView) => _undoManager.ExecuteCommand(new DuplicateNodeCommand(nodeView.Data));
+
+        private void OnRemoveButtonClicked(SkillNodeView nodeView, VisualElement inspectorPanel)
+        {
+            RemoveNode(nodeView);
             inspectorPanel.Clear();
         }
 
-        private void RemoveNode(SkillNodeView nodeView)
-        {
-            _undoManager.ExecuteCommand(new RemoveNodeCommand(nodeView.Data));
-        }
+        private void RemoveNode(SkillNodeView nodeView) => _undoManager.ExecuteCommand(new RemoveNodeCommand(nodeView.Data));
 
-        private VisualElement BuildNodeInspector(SkillNodeView node)
+        private VisualElement BuildNodeInspector(SkillNodeView nodeView)
         {
             var inspectorContent = CreateInspectorContent();
-            var serializedObject = new SerializedObject(node.Data);
+            var serializedObject = new SerializedObject(nodeView.Data);
 
             var label = new Label("Skill Node Setting");
             label.style.fontSize = 25;
@@ -87,16 +97,16 @@ namespace SkillTreeGraph.Editor
                     {
                         field.RegisterValueChangeCallback(evt =>
                         {
-                            node.RefreshUI();
+                            nodeView.RefreshUI();
                             serializedObject.ApplyModifiedProperties();
                         });
                     }
 
-                    if(iterator.propertyPath == "NodeSize")
+                    if (iterator.propertyPath == "NodeSize")
                     {
                         field.RegisterValueChangeCallback(evt =>
                         {
-                            node.RefreshSize();
+                            nodeView.RefreshSize();
                             serializedObject.ApplyModifiedProperties();
                         });
                     }

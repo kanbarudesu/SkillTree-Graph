@@ -9,18 +9,18 @@ namespace SkillTreeGraph.Core
 
         private int GetCost(int level) => BaseCost + (CostMultiplierPerLevel * (level - 1));
 
-        public override bool CanAfford(ISkillContext context, int targetLevel)
+        public override bool CanAfford(ISkillContext context, SkillNodeRuntimeData nodeState, int targetLevel)
         {
             //Implement currency check
             return true;
         }
 
-        public override void Pay(ISkillContext context, int targetLevel)
+        public override void Pay(ISkillContext context, SkillNodeRuntimeData nodeState, int targetLevel)
         {
             //Implement currency payment
         }
 
-        public override string GetDescription(ISkillContext context, int targetLevel)
+        public override string GetDescription(ISkillContext context, SkillNodeRuntimeData nodeState, int targetLevel)
         {
             return $"{GetCost(targetLevel)} {CurrencyId}";
         }

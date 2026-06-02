@@ -4,15 +4,21 @@
         <ui:VisualElement icon-image="project://database/Assets/Sprites/Round/zebra.png?fileID=2800000&amp;guid=3c5a587270113934e903c5c44767b873&amp;type=3#zebra" name="main-button" class="custom-unity-button" style="align-items: center; justify-content: center;">
             <ui:VisualElement name="button-icon" class="button-image" />
         </ui:VisualElement>
-        <ui:VisualElement name="option-button-container" class="node-option-button-container" style="top: -15px;">
+        <ui:VisualElement name="option-button-container" class="node-option-button-container" style="top: -15px; display: none;">
             <ui:VisualElement icon-image="project://database/Assets/Sprites/Round/zebra.png?fileID=2800000&amp;guid=3c5a587270113934e903c5c44767b873&amp;type=3#zebra" name="edit-button" class="node-option-button">
-                <ui:VisualElement name="image" class="option-button-image" style="background-image: url(&quot;project://database/Assets/Skill%20Tree%20Graph/Sprites/edit.png?fileID=2800000&amp;guid=ea14b3e604b40b647a113298df654bae&amp;type=3#edit&quot;);" />
+                <ui:VisualElement name="image" class="option-button-image" style="background-image: url(&quot;project://database/Assets/Skill%20Tree%20Graph/Sprites/Editor%20Icon/edit.png?fileID=2800000&amp;guid=ea14b3e604b40b647a113298df654bae&amp;type=3#edit&quot;);" />
             </ui:VisualElement>
             <ui:VisualElement icon-image="project://database/Assets/Sprites/Round/zebra.png?fileID=2800000&amp;guid=3c5a587270113934e903c5c44767b873&amp;type=3#zebra" name="connect-button" class="node-option-button" style="align-items: center; justify-content: center; flex-shrink: 0;">
-                <ui:VisualElement name="image" class="option-button-image" style="background-image: url(&quot;project://database/Assets/Skill%20Tree%20Graph/Sprites/link.png?fileID=2800000&amp;guid=38874101080404e4d8a64a734db3e891&amp;type=3#link&quot;);" />
+                <ui:VisualElement name="image" class="option-button-image" style="background-image: url(&quot;project://database/Assets/Skill%20Tree%20Graph/Sprites/Editor%20Icon/link.png?fileID=2800000&amp;guid=38874101080404e4d8a64a734db3e891&amp;type=3#link&quot;);" />
+            </ui:VisualElement>
+            <ui:VisualElement icon-image="project://database/Assets/Sprites/Round/zebra.png?fileID=2800000&amp;guid=3c5a587270113934e903c5c44767b873&amp;type=3#zebra" name="disconnect-button" class="node-option-button" style="align-items: center; justify-content: center; flex-shrink: 0;">
+                <ui:VisualElement name="image" class="option-button-image" style="background-image: url(&quot;project://database/Assets/Skill%20Tree%20Graph/Sprites/Editor%20Icon/unlink-icon.png?fileID=2800000&amp;guid=067052da80c8d2a418efdb20f8f20a18&amp;type=3#unlink-icon&quot;);" />
+            </ui:VisualElement>
+            <ui:VisualElement icon-image="project://database/Assets/Sprites/Round/zebra.png?fileID=2800000&amp;guid=3c5a587270113934e903c5c44767b873&amp;type=3#zebra" name="duplicate-button" class="node-option-button" style="align-items: center; justify-content: center; flex-shrink: 0;">
+                <ui:VisualElement name="image" class="option-button-image" style="background-image: url(&quot;project://database/Assets/Skill%20Tree%20Graph/Sprites/Editor%20Icon/copy-file-icon.png?fileID=2800000&amp;guid=c4df3f09b0292c04ba30c316ad7ff866&amp;type=3#copy-file-icon&quot;);" />
             </ui:VisualElement>
             <ui:VisualElement icon-image="project://database/Assets/Sprites/Round/zebra.png?fileID=2800000&amp;guid=3c5a587270113934e903c5c44767b873&amp;type=3#zebra" name="remove-button" class="node-option-button" style="align-items: center; justify-content: center; flex-shrink: 0;">
-                <ui:VisualElement name="image" class="option-button-image" style="background-image: url(&quot;project://database/Assets/Skill%20Tree%20Graph/Sprites/delete.png?fileID=2800000&amp;guid=4d1a62a7cfde3184d9239f119bdb91ee&amp;type=3#delete&quot;);" />
+                <ui:VisualElement name="image" class="option-button-image" style="background-image: url(&quot;project://database/Assets/Skill%20Tree%20Graph/Sprites/Editor%20Icon/delete.png?fileID=2800000&amp;guid=4d1a62a7cfde3184d9239f119bdb91ee&amp;type=3#delete&quot;);" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

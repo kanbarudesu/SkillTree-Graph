@@ -15,13 +15,13 @@ MonoBehaviour:
   Id: dbb31e731fffe0f458b40c99d742832a
   DisplayName: Prestige Insight
   Description: Increases the amount of special currency earned.
-  Icon: {fileID: -963791335356448533, guid: 7ac1d82613198cb4d844253c610c39ff, type: 3}
+  Icon: {fileID: 21300000, guid: a3df235824aef2946b2c6cc241433e0f, type: 3}
   MaxLevel: 3
   ResourcesCost:
-  - rid: 3209287020073189776
-  - rid: 3209287020073189777
+  - rid: 6086813965064077624
+  - rid: 6086813965064077625
   UnlockConditions:
-  - rid: 3209287020073189778
+  - rid: 6086813965064077626
   Effects: []
   ParentIds:
   - 9678e2c67b243184781a6796e343db9d
@@ -33,16 +33,16 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 3209287020073189776
+    - rid: 6086813965064077624
       type: {class: CurrencyCost, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data:
         CurrencyId: Energy
         BaseCost: 100
         CostMultiplierPerLevel: 50
-    - rid: 3209287020073189777
+    - rid: 6086813965064077625
       type: {class: SkillPointCost, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data:
         PointsRequired: 1
-    - rid: 3209287020073189778
+    - rid: 6086813965064077626
       type: {class: AnyParentUnlockedCondition, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data: 

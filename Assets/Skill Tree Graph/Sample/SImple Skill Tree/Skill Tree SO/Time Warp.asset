@@ -16,12 +16,12 @@ MonoBehaviour:
   DisplayName: Time Warp
   Description: Increases the overall speed of the game's internal clock, making all
     timers and productions run faster.
-  Icon: {fileID: -4178046375966092550, guid: ecd8a592f1690594d9955f570c2f39b0, type: 3}
+  Icon: {fileID: 21300000, guid: ecd8a592f1690594d9955f570c2f39b0, type: 3}
   MaxLevel: 1
   ResourcesCost:
-  - rid: 3209287020073189783
+  - rid: 6086813965064077631
   UnlockConditions:
-  - rid: 3209287020073189784
+  - rid: 6086813965064077632
   Effects: []
   ParentIds:
   - 574c9f5aaae677f408992b1791095fc7
@@ -32,10 +32,10 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 3209287020073189783
+    - rid: 6086813965064077631
       type: {class: SkillPointCost, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data:
         PointsRequired: 1
-    - rid: 3209287020073189784
+    - rid: 6086813965064077632
       type: {class: AnyParentUnlockedCondition, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data: 

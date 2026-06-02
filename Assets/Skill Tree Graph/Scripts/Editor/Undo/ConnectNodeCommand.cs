@@ -25,7 +25,7 @@ namespace SkillTreeGraph.Editor
             var _parentNode = _graphContext.Collection.GetNodeView(_parentNodeId);
             var _childNode = _graphContext.Collection.GetNodeView(_childNodeId);
 
-            _controllerContext.Interaction.RedrawConnections(_parentNode, _childNode);
+            _controllerContext.Interaction.ConnectNode(_parentNode, _childNode);
         }
 
         public void Undo()

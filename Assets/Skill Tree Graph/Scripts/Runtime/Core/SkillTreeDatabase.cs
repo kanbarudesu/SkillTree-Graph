@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SkillTreeGraph.Core
 {
-    [CreateAssetMenu(fileName = "SkillTreeDatabase", menuName = "SkillTreeDatabase", order = 0)]
+    [CreateAssetMenu(fileName = "SkillTreeDatabase", menuName = "SkillTreeGraph/SkillTreeDatabase")]
     public class SkillTreeDatabase : ScriptableObject
     {
         [HideInInspector]

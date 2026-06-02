@@ -54,9 +54,11 @@ namespace SkillTreeGraph.Editor
                 return;
 
             Vector2 mouseDelta = (Vector2)evt.position - _startMousePosition;
-
+#if UNITY_6000_3_OR_NEWER
+            float zoom = _graphContent.style.scale.value.value.x;
+#else
             float zoom = _graphContent.transform.scale.x;
-
+#endif
             Vector2 graphDelta = mouseDelta / zoom;
 
             Vector2 newPosition = _startNodePosition + graphDelta;

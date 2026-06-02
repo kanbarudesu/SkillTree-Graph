@@ -16,27 +16,27 @@ namespace SkillTreeGraph.Editor
             _settings = context.Settings;
         }
 
-        private string GetKey(SkillNodeView a, SkillNodeView b)
+        private string GetKey(SkillNodeView parent, SkillNodeView child)
         {
-            return $"{a.Data.Id}_{b.Data.Id}";
+            return $"{parent.Data.Id}_{child.Data.Id}";
         }
 
-        public void DrawConnection(SkillNodeView a, SkillNodeView b)
+        public void DrawConnection(SkillNodeView parent, SkillNodeView child)
         {
-            string key = GetKey(a, b);
+            string key = GetKey(parent, child);
 
             if (_connections.ContainsKey(key))
                 return;
 
-            var line = new ConnectionLineElement(a, b, _connectionContainer, _settings);
+            var line = new ConnectionLineElement(parent, child, _connectionContainer, _settings);
 
             _connectionContainer.Add(line);
             _connections.Add(key, line);
         }
 
-        public void RemoveConnection(SkillNodeView a, SkillNodeView b)
+        public void RemoveConnection(SkillNodeView parent, SkillNodeView child)
         {
-            string key = GetKey(a, b);
+            string key = GetKey(parent, child);
 
             if (!_connections.TryGetValue(key, out var line))
                 return;

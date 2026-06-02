@@ -16,12 +16,12 @@ MonoBehaviour:
   DisplayName: Resource Recycling
   Description: Provides a chance to refund a portion of the materials spent when
     purchasing an upgrade.
-  Icon: {fileID: 1192843865154028290, guid: 4614148f9074f03428c1d3630c48ce6c, type: 3}
+  Icon: {fileID: 21300000, guid: 9d92595ef1b7e56408f7c1b49895e31c, type: 3}
   MaxLevel: 3
   ResourcesCost:
-  - rid: 3209287020073189781
+  - rid: 6086813965064077629
   UnlockConditions:
-  - rid: 3209287020073189782
+  - rid: 6086813965064077630
   Effects: []
   ParentIds:
   - dbb31e731fffe0f458b40c99d742832a
@@ -33,11 +33,11 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 3209287020073189781
+    - rid: 6086813965064077629
       type: {class: SkillPointCost, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data:
         PointsRequired: 1
-    - rid: 3209287020073189782
+    - rid: 6086813965064077630
       type: {class: AnyParentAtLevelCondition, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data:
         RequiredLevel: 3

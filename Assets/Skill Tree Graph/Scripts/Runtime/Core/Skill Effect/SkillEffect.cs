@@ -6,6 +6,6 @@ namespace SkillTreeGraph.Core
         public abstract void Apply(ISkillContext context, int level);
         public virtual void Remove(ISkillContext context, int level) { }
         
-        public virtual string GetDescription(int currentLevel, bool isMaxLevel) => string.Empty;
+        public virtual string GetDescription(ISkillContext context, int currentLevel, bool isMaxLevel) => string.Empty;
     }
 }

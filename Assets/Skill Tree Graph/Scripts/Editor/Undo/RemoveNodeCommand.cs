@@ -39,7 +39,7 @@ namespace SkillTreeGraph.Editor
 
         public void Undo()
         {
-            _nodeView = _controllerContext.NodeCreation.CreateNodeView(_node, _node.UiToolkitPosition);
+            _nodeView = _controllerContext.NodeCreation.CreateNodeView(_node, _node.UiToolkitPosition, _node.NodeSize);
             _graphContext.Collection.InsertNodeAt(_index, _nodeView);
         }
     }

@@ -164,14 +164,8 @@ namespace SkillTreeGraph.Editor
 
         private void AutoSave()
         {
-            if (_graphContext.Settings.AutoSaveLoad && !string.IsNullOrEmpty(_currentSavePath))
-            {
-                if (AssetDatabase.AssetPathExists(GetRelativePath(_currentSavePath)))
-                {
-                    EditorPrefs.SetString("SkillTreeSavePath", _currentSavePath);
-                    SaveData(_currentSavePath);
-                }
-            }
+            if (_graphContext.Settings.AutoSaveLoad && !string.IsNullOrEmpty(_currentSavePath) && File.Exists(_currentSavePath))
+                SaveData(_currentSavePath);
         }
 
         public void OnSavingData()
@@ -182,13 +176,12 @@ namespace SkillTreeGraph.Editor
 
         public bool TryOverwriteSaveData()
         {
-            if (string.IsNullOrEmpty(_currentSavePath) || !AssetDatabase.AssetPathExists(GetRelativePath(_currentSavePath)))
+            if (string.IsNullOrEmpty(_currentSavePath) || !File.Exists(_currentSavePath))
                 return false;
 
             if (!EditorUtility.DisplayDialog("Overwrite File", "Update existing save file?", "Yes", "Cancel"))
                 return false;
 
-            EditorPrefs.SetString("SkillTreeSavePath", _currentSavePath);
             SaveData(_currentSavePath);
             return true;
         }
@@ -211,6 +204,11 @@ namespace SkillTreeGraph.Editor
                 if (data != null)
                 {
                     _currentSavePath = path;
+
+                    _graphContext.Settings.SetLastSavePath(ToProjectRelativePath(path));
+                    EditorUtility.SetDirty(_graphContext.Settings);
+                    AssetDatabase.SaveAssets();
+
                     RebuildSkillTree(data);
                 }
             }
@@ -219,9 +217,10 @@ namespace SkillTreeGraph.Editor
 
         private void LoadInitialSaveData()
         {
-            if (_graphContext.Settings.AutoSaveLoad)
+            if (_graphContext.Settings.AutoSaveLoad && !string.IsNullOrEmpty(_graphContext.Settings.LastSavePath))
             {
-                _currentSavePath = EditorPrefs.GetString("SkillTreeSavePath");
+                _currentSavePath = ToAbsolutePath(_graphContext.Settings.LastSavePath);
+
                 var data = LoadData(_currentSavePath);
                 if (data != null)
                 {
@@ -235,7 +234,12 @@ namespace SkillTreeGraph.Editor
         private void SaveData(string path)
         {
             var saveData = InitializeSaveData();
+
             _currentSavePath = path;
+            _graphContext.Settings.SetLastSavePath(ToProjectRelativePath(path));
+            EditorUtility.SetDirty(_graphContext.Settings);
+            AssetDatabase.SaveAssets();
+
             File.WriteAllText(path, EditorJsonUtility.ToJson(saveData, true));
             AssetDatabase.Refresh();
         }
@@ -352,6 +356,24 @@ namespace SkillTreeGraph.Editor
             EditorGUIUtility.PingObject(database);
         }
 
-        public void ClearSavePath() => _currentSavePath = null;
+        public void ClearSavePath()
+        {
+            _currentSavePath = null;
+            _graphContext.Settings.SetLastSavePath(string.Empty);
+            EditorUtility.SetDirty(_graphContext.Settings);
+            AssetDatabase.SaveAssets();
+        }
+
+        private string ToProjectRelativePath(string absolutePath)
+        {
+            string projectRoot = Directory.GetParent(Application.dataPath).FullName;
+            return Path.GetRelativePath(projectRoot, absolutePath).Replace('\\', '/');
+        }
+
+        private string ToAbsolutePath(string relativePath)
+        {
+            string projectRoot = Directory.GetParent(Application.dataPath).FullName;
+            return Path.GetFullPath(Path.Combine(projectRoot, relativePath));
+        }
     }
 }

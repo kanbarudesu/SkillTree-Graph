@@ -16,12 +16,12 @@ MonoBehaviour:
   DisplayName: Critical Success II
   Description: Grants medium chance for any manual action to produce multiple times
     the standard output.
-  Icon: {fileID: 4113829005332862926, guid: 166a45cd556e6fd4fbc3554724a91fc7, type: 3}
+  Icon: {fileID: 21300000, guid: 2a8016f6f9c31614594af4ac48f92260, type: 3}
   MaxLevel: 3
   ResourcesCost:
-  - rid: 3209287020073189785
+  - rid: 6086813965064077633
   UnlockConditions:
-  - rid: 3209287020073189786
+  - rid: 6086813965064077634
   Effects: []
   ParentIds:
   - 6bfb4e39db927e14384bf221703b7370
@@ -34,12 +34,12 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 3209287020073189785
+    - rid: 6086813965064077633
       type: {class: CurrencyCost, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data:
         CurrencyId: Energy
         BaseCost: 100
         CostMultiplierPerLevel: 50
-    - rid: 3209287020073189786
+    - rid: 6086813965064077634
       type: {class: AnyParentUnlockedCondition, ns: SkillTreeGraph.Core, asm: SkillTreeGraph}
       data: 
