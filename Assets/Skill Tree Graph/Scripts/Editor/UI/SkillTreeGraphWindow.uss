@@ -101,7 +101,7 @@
     position: absolute;
     width: 85%;
     height: 85%;
-    background-image: url("project://database/Assets/Skill%20Tree%20Graph/Sprites/Editor%20Icon/Questionmark-White.png?fileID=2800000&guid=ffbc3e5a99e4da54db1464d9b25a037f&type=3#Questionmark-White");
+    background-image: url("project://database/Assets/Skill%20Tree%20Graph/Sprites/Editor%20Icon/Questionmark-White.png?fileID=21300000&guid=ffbc3e5a99e4da54db1464d9b25a037f&type=3#Questionmark-White");
     -unity-background-image-tint-color: rgb(255, 255, 255);
 }
 
@@ -134,4 +134,15 @@
 }
 
 .no-zoom {
+}
+
+.node-grouped {
+    border-left-color: rgb(77, 153, 255);
+    border-right-color: rgb(77, 153, 255);
+    border-top-color: rgb(77, 153, 255);
+    border-bottom-color: rgb(77, 153, 255);
+    border-top-width: 4px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 4px;
 }

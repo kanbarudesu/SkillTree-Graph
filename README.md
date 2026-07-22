@@ -14,12 +14,13 @@ A **node-based Skill Tree editor for Unity** that allows developers to visually 
 - Connect skills to define prerequisites
 - Create branching skill paths
 
-### Add / Remove Nodes
-- Quickly create new skills
+### Add, Remove & Duplicate Nodes
+- Quickly create new skills node.
 - Delete nodes and connections easily
+- Duplicate existing node.
 
 ### Undo / Redo Support
-
+- Undo/Redo for Created Node, Deleted Node, Connection/Disconnect Node
 
 ### Save & Load
 - Save skill trees as **JSON**
@@ -55,11 +56,6 @@ A **node-based Skill Tree editor for Unity** that allows developers to visually 
 
 
 ---
-### Dependencies
-
-* [DOTween](https://dotween.demigiant.com/) (Required for UI animations) (**optional**)
-
----
 
 ## 🎮 Keyboard Shortcuts (Skill Tree Editor)
 
@@ -72,6 +68,7 @@ A **node-based Skill Tree editor for Unity** that allows developers to visually 
 | Pan View           | `Middle Mouse Drag`       |
 | Undo               | `Ctrl + Z`                |
 | Redo               | `Ctrl + Y`                |
+| Group Selection               | `Shift + Click Node` or `Hold Left Click + Drag`                |
 
 ---
 ## 🛠 Extensibility Guide

@@ -34,7 +34,7 @@ namespace SkillTreeGraph.Editor
             return asset;
         }
 
-        public static void BuildInspectorElement(VisualElement panel, SerializedObject serializedObject, string labelText = null)
+        public static void BuildInspectorElement(VisualElement panel, SerializedObject serializedObject, string labelText = null, System.Predicate<string> isReadOnly = null, IReadOnlyDictionary<string, System.Action> onPropertyChanged = null)
         {
             panel.Clear();
 
@@ -52,6 +52,19 @@ namespace SkillTreeGraph.Editor
                         continue;
 
                     var field = new PropertyField(iterator.Copy());
+
+                    if (isReadOnly != null && isReadOnly(iterator.propertyPath))
+                        field.SetEnabled(false);
+
+                    if (onPropertyChanged != null && onPropertyChanged.TryGetValue(iterator.propertyPath, out var callback))
+                    {
+                        field.RegisterValueChangeCallback(evt =>
+                        {
+                            callback();
+                            serializedObject.ApplyModifiedProperties();
+                        });
+                    }
+
                     panel.Add(field);
 
                 } while (iterator.NextVisible(false));
@@ -95,12 +108,31 @@ namespace SkillTreeGraph.Editor
 
         public static T DeepClone<T>(T source) where T : ScriptableObject
         {
-            T clone = ScriptableObject.CreateInstance<T>();
+            T clone = CreateTransientInstance<T>();
 
             string json = EditorJsonUtility.ToJson(source);
             EditorJsonUtility.FromJsonOverwrite(json, clone);
 
             return clone;
+        }
+
+        public static T CreateTransientInstance<T>() where T : ScriptableObject
+        {
+            T instance = ScriptableObject.CreateInstance<T>();
+            instance.hideFlags = HideFlags.DontUnloadUnusedAsset;
+            return instance;
+        }
+
+        public static Vector2 ScreenToGraph(VisualElement graphContent, Vector2 screenPosition)
+        {
+#if UNITY_6000_3_OR_NEWER
+            float zoom = graphContent.style.scale.value.value.x;
+            Vector2 pan = new Vector2(graphContent.style.translate.value.x.value, graphContent.style.translate.value.y.value);
+#else
+            float zoom = graphContent.transform.scale.x;
+            Vector2 pan = graphContent.transform.position;
+#endif
+            return (screenPosition - pan) / zoom;
         }
     }
 }

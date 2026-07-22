@@ -9,15 +9,17 @@ namespace SkillTreeGraph.Editor
         private readonly VisualElement _root;
         private readonly GraphContext _graphContext;
         private readonly GraphControllerContext _controllerContext;
+        private readonly NodeGroupSelectionController _groupSelection;
         private readonly UndoManager _undoManager;
         private readonly VisualTreeAsset _buttonTemplate;
         private readonly SkillTreeSettingData _settings;
 
-        public GraphNodeCreationController(GraphContext graphContext, GraphControllerContext controllerContext, UndoManager undoManager, VisualTreeAsset buttonTemplate)
+        public GraphNodeCreationController(GraphContext graphContext, GraphControllerContext controllerContext, NodeGroupSelectionController groupSelection, UndoManager undoManager, VisualTreeAsset buttonTemplate)
         {
             _root = graphContext.Root;
             _graphContext = graphContext;
             _controllerContext = controllerContext;
+            _groupSelection = groupSelection;
             _undoManager = undoManager;
             _buttonTemplate = buttonTemplate;
             _settings = graphContext.Settings;
@@ -27,13 +29,13 @@ namespace SkillTreeGraph.Editor
 
         private void OnPointerDown(PointerDownEvent evt)
         {
-            if (!_settings.CanAddSkillOnClick)
+            if (!_settings.AllowCtrlClickNodeCreation)
                 return;
 
             if (evt.button != 0)
                 return;
 
-            if (!evt.ctrlKey)
+            if (!evt.ctrlKey && !evt.commandKey)
                 return;
 
             Vector2 graphPosition = ScreenToGraph(evt.localPosition);
@@ -49,20 +51,11 @@ namespace SkillTreeGraph.Editor
 
             CreateNodeAt(graphPosition);
             _controllerContext.Selection.ClearSelection();
+            _groupSelection.ClearSelection();
             evt.StopPropagation();
         }
 
-        private Vector2 ScreenToGraph(Vector2 mousePosition)
-        {
-#if UNITY_6000_3_OR_NEWER
-            float zoom = _graphContext.GraphContent.style.scale.value.value.x;
-            Vector2 pan = new Vector2(_graphContext.GraphContent.style.translate.value.x.value, _graphContext.GraphContent.style.translate.value.y.value);
-#else
-            float zoom = _graphContext.GraphContent.transform.scale.x;
-            Vector2 pan = _graphContext.GraphContent.transform.position;
-#endif
-            return (mousePosition - pan) / zoom;
-        }
+        private Vector2 ScreenToGraph(Vector2 mousePosition) => SkillTreeEditorUtility.ScreenToGraph(_graphContext.GraphContent, mousePosition);
 
         private void CreateNodeAt(Vector2 position) => _undoManager.ExecuteCommand(new CreateNodeCommand(position));
 
@@ -94,8 +87,9 @@ namespace SkillTreeGraph.Editor
                 () => _controllerContext.Interaction.OnNodeClicked(nodeView)
             );
             _controllerContext.NodeOptionController.RegisterNodeButtons(_graphContext.Root, nodeView);
+            _groupSelection.RegisterNode(nodeView, nodeView.Q<VisualElement>("main-button"));
 
-            var dragManipulator = new NodeDragManipulator(_graphContext, nodeView);
+            var dragManipulator = new NodeDragManipulator(_graphContext, nodeView, _groupSelection);
             nodeView.AddManipulator(dragManipulator);
 
             _graphContext.NodeContainer.Add(nodeView);

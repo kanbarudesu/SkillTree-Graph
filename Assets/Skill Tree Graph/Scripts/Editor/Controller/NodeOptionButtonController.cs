@@ -1,7 +1,6 @@
 using System;
+using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SkillTreeGraph.Editor
@@ -72,61 +71,30 @@ namespace SkillTreeGraph.Editor
 
         private void RemoveNode(SkillNodeView nodeView) => _undoManager.ExecuteCommand(new RemoveNodeCommand(nodeView.Data));
 
+        private static readonly HashSet<string> ReadOnlyFieldPaths = new()
+        {
+            "Id", "ParentIds", "ChildrenIds", "UiToolkitPosition", "CanvasPosition"
+        };
+
         private VisualElement BuildNodeInspector(SkillNodeView nodeView)
         {
             var inspectorContent = CreateInspectorContent();
             var serializedObject = new SerializedObject(nodeView.Data);
 
-            var label = new Label("Skill Node Setting");
-            label.style.fontSize = 25;
-            label.style.unityFontStyleAndWeight = FontStyle.Bold;
-            inspectorContent.Add(label);
-
-            var iterator = serializedObject.GetIterator();
-            if (iterator.NextVisible(true))
+            var onPropertyChanged = new Dictionary<string, Action>
             {
-                do
-                {
-                    if (iterator.propertyPath == "m_Script") continue;
+                ["Icon"] = nodeView.RefreshUI,
+                ["NodeSize"] = nodeView.RefreshSize,
+            };
 
-                    var field = new PropertyField(iterator.Copy());
-                    if (ShouldDisable(iterator.propertyPath))
-                        field.SetEnabled(false);
-
-                    if (iterator.propertyPath == "Icon")
-                    {
-                        field.RegisterValueChangeCallback(evt =>
-                        {
-                            nodeView.RefreshUI();
-                            serializedObject.ApplyModifiedProperties();
-                        });
-                    }
-
-                    if (iterator.propertyPath == "NodeSize")
-                    {
-                        field.RegisterValueChangeCallback(evt =>
-                        {
-                            nodeView.RefreshSize();
-                            serializedObject.ApplyModifiedProperties();
-                        });
-                    }
-
-                    inspectorContent.Add(field);
-
-                } while (iterator.NextVisible(false));
-            }
-            inspectorContent.Bind(serializedObject);
+            SkillTreeEditorUtility.BuildInspectorElement(
+                inspectorContent,
+                serializedObject,
+                "Skill Node Setting",
+                ReadOnlyFieldPaths.Contains,
+                onPropertyChanged);
 
             return inspectorContent;
-        }
-
-        private bool ShouldDisable(string propertyPath)
-        {
-            return propertyPath == "Id"
-                || propertyPath == "ParentIds"
-                || propertyPath == "ChildrenIds"
-                || propertyPath == "UiToolkitPosition"
-                || propertyPath == "CanvasPosition";
         }
     }
 }

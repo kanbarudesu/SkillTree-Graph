@@ -28,7 +28,8 @@ namespace SkillTreeGraph.Editor
 
             _iconImage.RegisterCallback<GeometryChangedEvent>(evt =>
             {
-                _defaultIcon = _iconImage.resolvedStyle.backgroundImage.sprite;
+                if (_defaultIcon == null)
+                    _defaultIcon = _iconImage.resolvedStyle.backgroundImage.sprite;
                 RefreshUI();
                 SetPosition(data.UiToolkitPosition);
             });

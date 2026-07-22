@@ -29,7 +29,7 @@ namespace SkillTreeGraph.Editor
         [SerializeField] private float snapSize = 50f;
 
         [Header("Other")]
-        [SerializeField] private bool canAddSkillOnClick = true;
+        [SerializeField] private bool allowCtrlClickNodeCreation = true;
         [SerializeField] private bool autoSaveLoad = true;
 
         [SerializeField, HideInInspector] private string lastSavePath;
@@ -50,7 +50,7 @@ namespace SkillTreeGraph.Editor
         public bool EnableSnap => enableSnap;
         public float SnapSize => snapSize;
 
-        public bool CanAddSkillOnClick => canAddSkillOnClick;
+        public bool AllowCtrlClickNodeCreation => allowCtrlClickNodeCreation;
         public bool AutoSaveLoad => autoSaveLoad;
 
         public string LastSavePath => lastSavePath;

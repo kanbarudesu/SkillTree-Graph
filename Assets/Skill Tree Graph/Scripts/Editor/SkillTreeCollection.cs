@@ -53,7 +53,8 @@ namespace SkillTreeGraph.Editor
         }
 
         public int FindIndex(SkillNode node) => _nodes.IndexOf(node);
-        public SkillNode GetNodes(string nodeId) => _nodeLookup.TryGetValue(nodeId, out var node) ? node : null;
+        public SkillNode GetNode(string nodeId) => _nodeLookup.TryGetValue(nodeId, out var node) ? node : null;
+
         public SkillNodeView GetNodeView(string nodeId) => _nodeViewLookup.TryGetValue(nodeId, out var view) ? view : null;
 
         public void Clear()

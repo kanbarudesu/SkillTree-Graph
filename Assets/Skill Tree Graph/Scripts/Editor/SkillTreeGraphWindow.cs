@@ -21,6 +21,7 @@ namespace SkillTreeGraph.Editor
     {
         public GraphCameraController GraphCam;
         public GraphSelectionController Selection;
+        public NodeGroupSelectionController GroupSelection;
         public SettingPanelController SettingPanel;
         public GraphNodeCreationController NodeCreation;
         public NodeOptionButtonController NodeOptionController;
@@ -32,6 +33,7 @@ namespace SkillTreeGraph.Editor
         {
             GraphCam?.Dispose();
             Selection?.Dispose();
+            GroupSelection?.Dispose();
             SettingPanel?.Dispose();
             NodeCreation?.Dispose();
             SaveLoad?.Dispose();
@@ -64,6 +66,7 @@ namespace SkillTreeGraph.Editor
         private void OnEnable()
         {
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+            AssemblyReloadEvents.beforeAssemblyReload += Dispose;
             if (!EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 InitializeWindow();
@@ -73,11 +76,19 @@ namespace SkillTreeGraph.Editor
         private void OnDisable()
         {
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+            AssemblyReloadEvents.beforeAssemblyReload -= Dispose;
             Dispose();
         }
 
         private void Update()
         {
+            if (_isInitialized && _graphContext.Collection == null && !EditorApplication.isPlaying)
+            {
+                Dispose();
+                InitializeWindow();
+                return;
+            }
+
             _controllerContext.GraphCam?.Update();
         }
 
@@ -109,57 +120,72 @@ namespace SkillTreeGraph.Editor
         {
             if (_isInitialized) return;
             rootVisualElement.Clear();
-            _isInitialized = true;
 
             if (EditorApplication.isPlaying)
             {
                 ShowPlayModeMessage();
+                _isInitialized = true;
                 return;
             }
 
-            _graphContext.Settings = Resources.Load<SkillTreeSettingData>("Skill Tree Data/SkillTreeSettingData");
-            if (_graphContext.Settings == null)
+            try
             {
-                _graphContext.Settings = CreateInstance<SkillTreeSettingData>();
-
-                string folderPath = "Assets/Resources/Skill Tree Data";
-                if (!AssetDatabase.IsValidFolder(folderPath))
+                _graphContext.Settings = Resources.Load<SkillTreeSettingData>("Skill Tree Data/SkillTreeSettingData");
+                if (_graphContext.Settings == null)
                 {
-                    Directory.CreateDirectory(folderPath);
+                    _graphContext.Settings = CreateInstance<SkillTreeSettingData>();
+
+                    string folderPath = "Assets/Resources/Skill Tree Data";
+                    if (!AssetDatabase.IsValidFolder(folderPath))
+                    {
+                        Directory.CreateDirectory(folderPath);
+                        AssetDatabase.Refresh();
+                    }
+
+                    AssetDatabase.CreateAsset(_graphContext.Settings, $"{folderPath}/SkillTreeSettingData.asset");
+                    AssetDatabase.SaveAssets();
                     AssetDatabase.Refresh();
+
+                    Debug.Log("Created SkillTreeSettingData.asset in " + folderPath);
                 }
 
-                AssetDatabase.CreateAsset(_graphContext.Settings, $"{folderPath}/SkillTreeSettingData.asset");
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
+                InitializeGraphElements();
 
-                Debug.Log("Created SkillTreeSettingData.asset in " + folderPath);
+                _undoManager = new UndoManager(_graphContext, _controllerContext);
+                _graphContext.Collection = SkillTreeEditorUtility.CreateTransientInstance<SkillTreeCollection>();
+
+                _controllerContext.GraphCam = new GraphCameraController(_graphContext);
+                _controllerContext.SettingPanel = new SettingPanelController(_graphContext);
+                _controllerContext.GroupSelection = new NodeGroupSelectionController(_graphContext);
+                _controllerContext.NodeCreation = new GraphNodeCreationController(_graphContext, _controllerContext, _controllerContext.GroupSelection, _undoManager, NodeButtonTemplateTree);
+                _controllerContext.ConnectionRenderer = new GraphConnectionController(_graphContext);
+                _controllerContext.Interaction = new GraphInteractionController(_controllerContext.ConnectionRenderer, _undoManager);
+                _controllerContext.Selection = new GraphSelectionController(_graphContext);
+                _controllerContext.NodeOptionController = new NodeOptionButtonController(_controllerContext, _undoManager);
+                _controllerContext.SaveLoad = new SkillSaveLoadController(_graphContext, _controllerContext);
+
+                _graphContext.GridBackground.RegisterCallback<KeyDownEvent>(OnBackgroundClicked, TrickleDown.TrickleDown);
+
+                _undoButton = rootVisualElement.Q<Button>("undo-button");
+                _undoButton.clicked += _undoManager.Undo;
+
+                _redoButton = rootVisualElement.Q<Button>("redo-button");
+                _redoButton.clicked += _undoManager.Redo;
+
+                _newSkillTreeButton = rootVisualElement.Q<Button>("new-skill-tree-button");
+                _newSkillTreeButton.clicked += InitializeNewSkillTree;
+
+                _isInitialized = true;
             }
-
-            InitializeGraphElements();
-
-            _undoManager = new UndoManager(_graphContext, _controllerContext);
-            _graphContext.Collection = CreateInstance<SkillTreeCollection>();
-
-            _controllerContext.GraphCam = new GraphCameraController(_graphContext);
-            _controllerContext.SettingPanel = new SettingPanelController(_graphContext);
-            _controllerContext.NodeCreation = new GraphNodeCreationController(_graphContext, _controllerContext, _undoManager, NodeButtonTemplateTree);
-            _controllerContext.ConnectionRenderer = new GraphConnectionController(_graphContext);
-            _controllerContext.Interaction = new GraphInteractionController(_controllerContext.ConnectionRenderer, _undoManager);
-            _controllerContext.Selection = new GraphSelectionController(_graphContext);
-            _controllerContext.NodeOptionController = new NodeOptionButtonController(_controllerContext, _undoManager);
-            _controllerContext.SaveLoad = new SkillSaveLoadController(_graphContext, _controllerContext);
-
-            _graphContext.GridBackground.RegisterCallback<KeyDownEvent>(OnBackgroundClicked, TrickleDown.TrickleDown);
-
-            _undoButton = rootVisualElement.Q<Button>("undo-button");
-            _undoButton.clicked += _undoManager.Undo;
-
-            _redoButton = rootVisualElement.Q<Button>("redo-button");
-            _redoButton.clicked += _undoManager.Redo;
-
-            _newSkillTreeButton = rootVisualElement.Q<Button>("new-skill-tree-button");
-            _newSkillTreeButton.clicked += InitializeNewSkillTree;
+            catch (Exception e)
+            {
+                // Leave _isInitialized false so the next OnEnable (e.g. after the domain reload
+                // triggered by a build) actually retries instead of permanently no-oping with a
+                // half-built window that requires closing/reopening to recover.
+                Debug.LogException(e);
+                _controllerContext.Dispose();
+                rootVisualElement.Clear();
+            }
         }
 
 
@@ -254,6 +280,7 @@ namespace SkillTreeGraph.Editor
             _graphContext.Collection.Clear();
             _controllerContext.ConnectionRenderer.Clear();
             _controllerContext.Selection.ClearSelection();
+            _controllerContext.GroupSelection.ClearSelection();
             _controllerContext.SaveLoad.ClearSavePath();
             _undoManager.ClearHistory();
         }

@@ -39,6 +39,7 @@ namespace SkillTreeGraph.Editor
             _nodeView = _graphContext.Collection.GetNodeView(_node.Id);
             _graphContext.Collection.RemoveNode(_nodeView);
             _controllerContext.Selection.ClearSelection();
+            _controllerContext.GroupSelection.ClearSelection();
             _controllerContext.Interaction.ExitMode();
             _controllerContext.ConnectionRenderer.RemoveAllConnectionsForNode(_nodeView);
 

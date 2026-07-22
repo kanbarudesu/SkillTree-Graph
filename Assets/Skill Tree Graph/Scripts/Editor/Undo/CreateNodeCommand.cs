@@ -23,7 +23,7 @@ namespace SkillTreeGraph.Editor
             _graphContext = graphContext;
             _controllerContext = controllerContext;
 
-            _node = ScriptableObject.CreateInstance<SkillNode>();
+            _node = SkillTreeEditorUtility.CreateTransientInstance<SkillNode>();
             if (string.IsNullOrEmpty(_node.Id))
                 _node.Id = GUID.Generate().ToString();
         }
@@ -40,6 +40,7 @@ namespace SkillTreeGraph.Editor
             _nodePosition = _node.UiToolkitPosition;
             _graphContext.Collection.RemoveNode(_nodeView);
             _controllerContext.Selection.ClearSelection();
+            _controllerContext.GroupSelection.ClearSelection();
             _controllerContext.Interaction.ExitMode();
             _controllerContext.ConnectionRenderer.RemoveAllConnectionsForNode(_nodeView);
 
