@@ -7,7 +7,7 @@ namespace SkillTreeGraph.Editor
     public class NodeDragManipulator : PointerManipulator
     {
         private SkillTreeSettingData _settings;
-
+        private GraphContext _graphContext;
         private VisualElement _graphContent;
         private SkillNodeView _node;
         private readonly NodeGroupSelectionController _groupSelection;
@@ -21,6 +21,7 @@ namespace SkillTreeGraph.Editor
 
         public NodeDragManipulator(GraphContext context, SkillNodeView node, NodeGroupSelectionController groupSelection)
         {
+            _graphContext = context;
             _graphContent = context.GraphContent;
             _settings = context.Settings;
             _node = node;
@@ -118,6 +119,7 @@ namespace SkillTreeGraph.Editor
             target.ReleasePointer(evt.pointerId);
             _dragging = false;
             _groupStartPositions = null;
+            _graphContext.GridBackground.Focus();
         }
     }
 }

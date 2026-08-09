@@ -29,9 +29,9 @@ namespace SkillTreeGraph.Editor
             _marqueeBox = CreateMarqueeBox();
             _background.Add(_marqueeBox);
 
-            _background.RegisterCallback<PointerDownEvent>(OnBackgroundPointerDown);
-            _background.RegisterCallback<PointerMoveEvent>(OnBackgroundPointerMove);
-            _background.RegisterCallback<PointerUpEvent>(OnBackgroundPointerUp);
+            _background.RegisterCallback<PointerDownEvent>(OnBackgroundPointerDown, TrickleDown.TrickleDown);
+            _background.RegisterCallback<PointerMoveEvent>(OnBackgroundPointerMove, TrickleDown.TrickleDown);
+            _background.RegisterCallback<PointerUpEvent>(OnBackgroundPointerUp, TrickleDown.TrickleDown);
         }
 
         public bool Contains(SkillNodeView node) => _selected.Contains(node);
@@ -197,9 +197,9 @@ namespace SkillTreeGraph.Editor
 
         public void Dispose()
         {
-            _background.UnregisterCallback<PointerDownEvent>(OnBackgroundPointerDown);
-            _background.UnregisterCallback<PointerMoveEvent>(OnBackgroundPointerMove);
-            _background.UnregisterCallback<PointerUpEvent>(OnBackgroundPointerUp);
+            _background.UnregisterCallback<PointerDownEvent>(OnBackgroundPointerDown, TrickleDown.TrickleDown);
+            _background.UnregisterCallback<PointerMoveEvent>(OnBackgroundPointerMove, TrickleDown.TrickleDown);
+            _background.UnregisterCallback<PointerUpEvent>(OnBackgroundPointerUp, TrickleDown.TrickleDown);
         }
     }
 }

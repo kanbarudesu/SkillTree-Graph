@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -234,6 +235,12 @@ namespace SkillTreeGraph.Editor
             {
                 _controllerContext.SaveLoad.SaveAsNewFile();
                 evt.StopPropagation();
+            }
+
+            if (evt.keyCode == KeyCode.Delete)
+            {
+                var nodes = _controllerContext.GroupSelection.SelectedNodes.Select(x => x.Data).ToList();
+                _undoManager.ExecuteCommand(new CompositeRemoveNodeCommand(nodes));
             }
         }
 
