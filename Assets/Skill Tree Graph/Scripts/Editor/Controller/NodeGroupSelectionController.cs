@@ -12,6 +12,7 @@ namespace SkillTreeGraph.Editor
         private readonly GraphContext _graphContext;
         private readonly VisualElement _background;
         private readonly VisualElement _marqueeBox;
+        private readonly GraphInteractionController _interaction;
 
         private readonly HashSet<SkillNodeView> _selected = new();
 
@@ -21,17 +22,19 @@ namespace SkillTreeGraph.Editor
 
         public IReadOnlyCollection<SkillNodeView> SelectedNodes => _selected;
 
-        public NodeGroupSelectionController(GraphContext graphContext)
+        public NodeGroupSelectionController(GraphContext graphContext, GraphInteractionController interaction)
         {
             _graphContext = graphContext;
             _background = graphContext.GridBackground;
+            _interaction = interaction;
 
             _marqueeBox = CreateMarqueeBox();
             _background.Add(_marqueeBox);
 
-            _background.RegisterCallback<PointerDownEvent>(OnBackgroundPointerDown, TrickleDown.TrickleDown);
-            _background.RegisterCallback<PointerMoveEvent>(OnBackgroundPointerMove, TrickleDown.TrickleDown);
-            _background.RegisterCallback<PointerUpEvent>(OnBackgroundPointerUp, TrickleDown.TrickleDown);
+            _background.RegisterCallback<KeyDownEvent>(OnBackgroundKeyDown);
+            _background.RegisterCallback<PointerDownEvent>(OnBackgroundPointerDown);
+            _background.RegisterCallback<PointerMoveEvent>(OnBackgroundPointerMove);
+            _background.RegisterCallback<PointerUpEvent>(OnBackgroundPointerUp);
         }
 
         public bool Contains(SkillNodeView node) => _selected.Contains(node);
@@ -40,15 +43,15 @@ namespace SkillTreeGraph.Editor
         {
             mainButton.RegisterCallback<PointerDownEvent>(evt =>
             {
+                if (_interaction.CurrentMode == GraphInteractionMode.Connect) return;
+
                 if (evt.shiftKey || evt.commandKey)
                 {
                     ToggleInGroup(node);
                     evt.StopPropagation();
                 }
                 else if (!_selected.Contains(node))
-                {
                     SelectOnly(node);
-                }
             });
         }
 
@@ -113,6 +116,12 @@ namespace SkillTreeGraph.Editor
             box.style.borderBottomColor = borderColor;
 
             return box;
+        }
+
+        private void OnBackgroundKeyDown(KeyDownEvent evt)
+        {
+            if (_interaction.CurrentMode == GraphInteractionMode.Connect && _selected.Count > 0)
+                ClearSelection();
         }
 
         private void OnBackgroundPointerDown(PointerDownEvent evt)

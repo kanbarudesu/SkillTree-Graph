@@ -9,19 +9,31 @@ namespace SkillTreeGraph.Editor
         private VisualElement _selectedNode;
         private VisualElement _selectedOptionContainer;
         private VisualElement _inspectorPanel;
+        private readonly GraphInteractionController _interaction;
 
         public VisualElement SelectedNode => _selectedNode;
 
-        public GraphSelectionController(GraphContext context)
+        public GraphSelectionController(GraphContext context, GraphInteractionController interaction)
         {
             _background = context.GridBackground;
             _inspectorPanel = context.Root.Q<VisualElement>("node-inspector-panel");
+            _interaction = interaction;
             RegisterBackgroundClick();
         }
 
         private void RegisterBackgroundClick()
         {
+            _background.RegisterCallback<KeyDownEvent>(OnBackgroundKeyDown);
             _background.RegisterCallback<PointerDownEvent>(OnBackgroundClicked);
+        }
+
+        private void OnBackgroundKeyDown(KeyDownEvent evt)
+        {
+            if (_interaction.CurrentMode == GraphInteractionMode.Connect && _selectedNode != null)
+            {
+                ClearSelection();
+                _background.Focus();
+            }
         }
 
         private void OnBackgroundClicked(PointerDownEvent evt)
@@ -37,6 +49,13 @@ namespace SkillTreeGraph.Editor
         {
             nodeButton.RegisterCallback<PointerDownEvent>(evt =>
             {
+                if (_interaction.CurrentMode == GraphInteractionMode.Connect)
+                {
+                    OnNodeClicked?.Invoke();
+                    evt.StopPropagation();
+                    return;
+                }
+
                 SelectNode(node, optionContainer, OnNodeClicked);
                 evt.StopPropagation();
             });

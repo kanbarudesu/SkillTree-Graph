@@ -37,6 +37,7 @@ namespace SkillTreeGraph.Editor
             GroupSelection?.Dispose();
             SettingPanel?.Dispose();
             NodeCreation?.Dispose();
+            Interaction?.Dispose();
             SaveLoad?.Dispose();
         }
     }
@@ -157,15 +158,16 @@ namespace SkillTreeGraph.Editor
 
                 _controllerContext.GraphCam = new GraphCameraController(_graphContext);
                 _controllerContext.SettingPanel = new SettingPanelController(_graphContext);
-                _controllerContext.GroupSelection = new NodeGroupSelectionController(_graphContext);
-                _controllerContext.NodeCreation = new GraphNodeCreationController(_graphContext, _controllerContext, _controllerContext.GroupSelection, _undoManager, NodeButtonTemplateTree);
                 _controllerContext.ConnectionRenderer = new GraphConnectionController(_graphContext);
-                _controllerContext.Interaction = new GraphInteractionController(_controllerContext.ConnectionRenderer, _undoManager);
-                _controllerContext.Selection = new GraphSelectionController(_graphContext);
+                _controllerContext.Interaction = new GraphInteractionController(_graphContext, _controllerContext.ConnectionRenderer, _undoManager);
+                _controllerContext.GroupSelection = new NodeGroupSelectionController(_graphContext, _controllerContext.Interaction);
+                _controllerContext.NodeCreation = new GraphNodeCreationController(_graphContext, _controllerContext, _controllerContext.GroupSelection, _undoManager, NodeButtonTemplateTree);
+                _controllerContext.Selection = new GraphSelectionController(_graphContext, _controllerContext.Interaction);
                 _controllerContext.NodeOptionController = new NodeOptionButtonController(_controllerContext, _undoManager);
                 _controllerContext.SaveLoad = new SkillSaveLoadController(_graphContext, _controllerContext);
 
-                _graphContext.GridBackground.RegisterCallback<KeyDownEvent>(OnBackgroundClicked, TrickleDown.TrickleDown);
+                _graphContext.GridBackground.RegisterCallback<KeyDownEvent>(OnBackgroundKeyDown, TrickleDown.TrickleDown);
+                _graphContext.GridBackground.RegisterCallback<KeyUpEvent>(OnBackgroundKeyUp, TrickleDown.TrickleDown);
 
                 _undoButton = rootVisualElement.Q<Button>("undo-button");
                 _undoButton.clicked += _undoManager.Undo;
@@ -201,7 +203,7 @@ namespace SkillTreeGraph.Editor
             rootVisualElement.Add(container);
         }
 
-        private void OnBackgroundClicked(KeyDownEvent evt)
+        private void OnBackgroundKeyDown(KeyDownEvent evt)
         {
             if (evt.keyCode == KeyCode.Z && evt.ctrlKey)
             {
@@ -244,6 +246,15 @@ namespace SkillTreeGraph.Editor
                 var nodes = _controllerContext.GroupSelection.SelectedNodes.Select(x => x.Data).ToList();
                 _undoManager.ExecuteCommand(new CompositeDuplicateNodeCommand(nodes));
             }
+
+            if (evt.keyCode == KeyCode.C)
+                _controllerContext.Interaction.OnHoldConnectKeyDown(evt);
+        }
+
+        private void OnBackgroundKeyUp(KeyUpEvent evt)
+        {
+            if (evt.keyCode == KeyCode.C)
+                _controllerContext.Interaction.OnHoldConnectKeyUp(evt);
         }
 
         private void InitializeGraphElements()
