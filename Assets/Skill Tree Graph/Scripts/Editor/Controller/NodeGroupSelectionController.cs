@@ -77,6 +77,15 @@ namespace SkillTreeGraph.Editor
             _selected.Clear();
         }
 
+        public void SetAndHighlightSelection(IEnumerable<SkillNodeView> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                _selected.Add(node);
+                SetHighlighted(node, true);
+            }
+        }
+
         private void SetHighlighted(SkillNodeView node, bool highlighted)
         {
             var mainButton = node.Q<VisualElement>("main-button");

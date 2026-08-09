@@ -180,15 +180,11 @@ namespace SkillTreeGraph.Editor
             }
             catch (Exception e)
             {
-                // Leave _isInitialized false so the next OnEnable (e.g. after the domain reload
-                // triggered by a build) actually retries instead of permanently no-oping with a
-                // half-built window that requires closing/reopening to recover.
                 Debug.LogException(e);
                 _controllerContext.Dispose();
                 rootVisualElement.Clear();
             }
         }
-
 
         private void ShowPlayModeMessage()
         {
@@ -241,6 +237,12 @@ namespace SkillTreeGraph.Editor
             {
                 var nodes = _controllerContext.GroupSelection.SelectedNodes.Select(x => x.Data).ToList();
                 _undoManager.ExecuteCommand(new CompositeRemoveNodeCommand(nodes));
+            }
+
+            if (evt.keyCode == KeyCode.D && evt.ctrlKey)
+            {
+                var nodes = _controllerContext.GroupSelection.SelectedNodes.Select(x => x.Data).ToList();
+                _undoManager.ExecuteCommand(new CompositeDuplicateNodeCommand(nodes));
             }
         }
 
