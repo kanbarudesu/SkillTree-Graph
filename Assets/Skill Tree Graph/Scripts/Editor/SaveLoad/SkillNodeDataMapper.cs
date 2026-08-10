@@ -4,8 +4,11 @@ using UnityEditor;
 
 namespace SkillTreeGraph.Editor
 {
-    public static class SkillNodeDataMapper
+    public static partial class SkillNodeDataMapper
     {
+        static partial void OnMapToSaveData(SkillNode node, SkillNodeSaveData data);
+        static partial void OnMapToNode(SkillNodeSaveData data, SkillNode node);
+
         public static SkillNodeSaveData ToSaveData(SkillNode node)
         {
             var data = new SkillNodeSaveData
@@ -31,6 +34,7 @@ namespace SkillTreeGraph.Editor
             data.UnlockConditions = new List<SkillUnlockCondition>(node.UnlockConditions ?? new List<SkillUnlockCondition>());
             data.Effects = new List<SkillEffect>(node.Effects ?? new List<SkillEffect>());
 
+            OnMapToSaveData(node, data);
             return data;
         }
 
@@ -50,6 +54,8 @@ namespace SkillTreeGraph.Editor
             node.UiToolkitPosition = data.UiToolkitPosition;
             node.CanvasPosition = data.CanvasPosition;
             node.NodeSize = data.NodeSize;
+
+            OnMapToNode(data, node);
             return node;
         }
 

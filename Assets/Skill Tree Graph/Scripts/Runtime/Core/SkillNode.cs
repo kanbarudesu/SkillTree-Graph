@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SkillTreeGraph.Core
 {
-    public class SkillNode : ScriptableObject
+    public partial class SkillNode : ScriptableObject
     {
         [Header("Identity")]
         public string Id;
