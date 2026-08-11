@@ -16,6 +16,7 @@ namespace SkillTreeGraph.Editor
         private readonly ExampleSkillTreeProvider _exampleProvider = new();
 
         private string _currentSavePath;
+        private bool _isExampleSaveData = false;
 
         public SkillSaveLoadController(GraphContext graphContext, GraphControllerContext controllerContext)
         {
@@ -88,7 +89,7 @@ namespace SkillTreeGraph.Editor
 
         private void AutoSave()
         {
-            if (!_graphContext.Settings.AutoSaveLoad) return;
+            if (!_graphContext.Settings.AutoSaveLoad || _isExampleSaveData) return;
 
             if (!string.IsNullOrEmpty(_currentSavePath) && File.Exists(_currentSavePath))
             {
@@ -194,6 +195,7 @@ namespace SkillTreeGraph.Editor
         {
             var saveData = SkillNodeDataMapper.ToSaveData(_graphContext.Settings, _graphContext.Collection);
 
+            _isExampleSaveData = false;
             _currentSavePath = path;
             _graphContext.Settings.SetLastSavePath(SkillTreePathUtility.ToProjectRelativePath(path));
             EditorUtility.SetDirty(_graphContext.Settings);
@@ -207,8 +209,10 @@ namespace SkillTreeGraph.Editor
         {
             var data = _exampleProvider.GetNext();
             if (data == null) return;
-
+            
+            _isExampleSaveData = true;
             _currentSavePath = null;
+            SkillTreeFileIO.Delete(ScratchSavePath);
             RebuildSkillTree(data);
         }
 
@@ -230,6 +234,7 @@ namespace SkillTreeGraph.Editor
 
         public void ClearSavePath()
         {
+            _isExampleSaveData = false;
             _currentSavePath = null;
             _graphContext.Settings.SetLastSavePath(string.Empty);
             EditorUtility.SetDirty(_graphContext.Settings);

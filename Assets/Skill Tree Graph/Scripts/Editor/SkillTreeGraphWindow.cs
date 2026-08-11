@@ -225,7 +225,8 @@ namespace SkillTreeGraph.Editor
 
             if (evt.keyCode == KeyCode.S && evt.ctrlKey && !evt.shiftKey)
             {
-                _controllerContext.SaveLoad.TryOverwriteSaveData();
+                if (_controllerContext.SaveLoad.TryOverwriteSaveData() == false)
+                    _controllerContext.SaveLoad.SaveAsNewFile();
                 evt.StopPropagation();
             }
 
