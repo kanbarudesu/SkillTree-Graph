@@ -68,7 +68,10 @@ A **node-based Skill Tree editor for Unity** that allows developers to visually 
 | Pan View           | `Middle Mouse Drag`       |
 | Undo               | `Ctrl + Z`                |
 | Redo               | `Ctrl + Y`                |
-| Group Selection               | `Shift + Click Node` or `Hold Left Click + Drag`                |
+| Group Selection    | `Shift + Click Node` or `Hold Left Click + Drag`|
+| Duplicate Group Selection | `Ctrl + D`|
+| Delete Group Selection | `Delete`|
+| Quick Node Connection | `Hold C + Click Node`|
 
 ---
 ## 🛠 Extensibility Guide
@@ -154,7 +157,7 @@ public class <YourUnlockCondition> : SkillUnlockCondition
 }
 ```
 
-###4. Creating Custom Skill Costs
+## 4. Creating Custom Skill Costs
 Costs define the price and check if the player can afford the upgrade.
 * Inherit from: SkillCost
 * Logic: Override CanAfford and Pay.
@@ -236,6 +239,69 @@ public class JsonFileSaveStorage : ISkillTreeSaveStorage
     }
 }
 ```
+
+## 7. Adding Custom Fields to `SkillNode` (Partial Class Extension)
+
+The core `SkillNode`, `SkillNodeSaveData`, and `SkillNodeDataMapper` classes are declared `partial` specifically so you can add your own fields without editing the package's own files. This means your additions survive package updates instead of being overwritten.
+
+### Setup
+import the separate **SkillTreeGraph-Extension** package. It adds a `Skill Tree Graph Extension` folder containing:
+
+* `SkillNode.Extended.cs` — runtime partial class for new `SkillNode` fields
+* `SkillTreeGraph.Extended.asmref` — links the file into the package's runtime assembly
+* `Editor/SkillNodeSaveData.Extended.cs` — partial class for the matching save-data field
+* `Editor/SkillNodeDataMapper.Extended.cs` — partial class implementing the save/load mapping
+* `Editor/SkillTreeGraph.Editor.Extended.asmref` — links the editor files into the package's editor assembly
+
+these files are safe to be **edited directly**. They're your extension point, not shipped logic. Don't delete or move the `.asmref` files; they're what makes your partial classes merge into the same assembly as the core package. Partial classes only merge within the same assembly, so without them your fields would just be a separate, unrelated type.
+
+### Adding a field
+As an example, say you want a `CritChanceBonus` field on every node.
+
+**1. Add the field in `SkillNode.Extended.cs`:**
+```csharp
+namespace SkillTreeGraph.Core
+{
+    public partial class SkillNode
+    {
+        public float CritChanceBonus;
+    }
+}
+```
+
+**2. Add a matching field in `Editor/SkillNodeSaveData.Extended.cs`** (needed so it's included when the tree is saved to JSON):
+```csharp
+namespace SkillTreeGraph.Editor
+{
+    public partial class SkillNodeSaveData
+    {
+        public float CritChanceBonus;
+    }
+}
+```
+
+**3. Map it in `Editor/SkillNodeDataMapper.Extended.cs`:**
+```csharp
+namespace SkillTreeGraph.Editor
+{
+    public static partial class SkillNodeDataMapper
+    {
+        static partial void OnMapToSaveData(SkillNode node, SkillNodeSaveData data)
+        {
+            data.CritChanceBonus = node.CritChanceBonus;
+        }
+
+        static partial void OnMapToNode(SkillNodeSaveData data, SkillNode node)
+        {
+            node.CritChanceBonus = data.CritChanceBonus;
+        }
+    }
+}
+```
+
+The new field now saves, loads, and carries over when generating ScriptableObject assets, with no changes to the core package files.
+
+---
 
 ## Inspector Usage
 Some custom classes above use [SerializeReference]. This means once you create a script inheriting from these base classes, they will automatically appear in the Add dropdown menus inside your SkillNode or SkillNodeUI inspector in Unity.
