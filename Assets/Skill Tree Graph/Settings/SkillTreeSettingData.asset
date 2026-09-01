@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 370f8ba4243dbcc44b4fd49d744d1f82, type: 3}
   m_Name: SkillTreeSettingData
   m_EditorClassIdentifier: 
-  skillTreeName: Resources
+  skillTreeName: The Warden
   defaultNodeSize: 50
   initialZoom: 1
   minZoom: 0.5
   maxZoom: 2.5
   zoomSpeed: 0.1
   zoomSmoothSpeed: 10
-  panSmoothSpeed: 100
+  panSmoothSpeed: 10
   graphBounds:
     serializedVersion: 2
     x: -2000
@@ -30,4 +30,10 @@ MonoBehaviour:
   snapSize: 25
   allowCtrlClickNodeCreation: 1
   autoSaveLoad: 1
-  lastSavePath: Assets/Plugin/Skill Tree Graph/Sample/SImple Skill Tree/Save Data/Resources-SkillTree.json
+  lastSavePath: 
+  InspectorPanelPos: {x: 950, y: 0}
+  InspectorPanelSize: {x: 330, y: 370}
+  IsInspectorPanelVisible: 1
+  SettingsPanelPos: {x: 0, y: 0}
+  SettingsPanelSize: {x: 330, y: 370}
+  IsSettingPanelVisible: 1
