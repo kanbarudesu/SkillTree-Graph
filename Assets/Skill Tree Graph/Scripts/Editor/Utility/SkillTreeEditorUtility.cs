@@ -34,14 +34,9 @@ namespace SkillTreeGraph.Editor
             return asset;
         }
 
-        public static void BuildInspectorElement(VisualElement panel, SerializedObject serializedObject, string labelText = null, System.Predicate<string> isReadOnly = null, IReadOnlyDictionary<string, System.Action> onPropertyChanged = null)
+        public static void BuildInspectorElement(VisualElement panel, SerializedObject serializedObject, System.Predicate<string> isReadOnly = null, IReadOnlyDictionary<string, System.Action> onPropertyChanged = null)
         {
             panel.Clear();
-
-            var label = new Label(labelText);
-            label.style.fontSize = 25;
-            label.style.unityFontStyleAndWeight = FontStyle.Bold;
-            panel.Add(label);
 
             var iterator = serializedObject.GetIterator();
             if (iterator.NextVisible(true))
@@ -133,6 +128,20 @@ namespace SkillTreeGraph.Editor
             Vector2 pan = graphContent.transform.position;
 #endif
             return (screenPosition - pan) / zoom;
+        }
+
+        public static void EnsureFolderExists(string folderPath)
+        {
+            if (AssetDatabase.IsValidFolder(folderPath))
+                return;
+
+            string parent = Path.GetDirectoryName(folderPath).Replace("\\", "/");
+            string folderName = Path.GetFileName(folderPath);
+
+            if (!AssetDatabase.IsValidFolder(parent))
+                EnsureFolderExists(parent);
+
+            AssetDatabase.CreateFolder(parent, folderName);
         }
     }
 }

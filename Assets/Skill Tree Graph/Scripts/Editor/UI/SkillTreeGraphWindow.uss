@@ -105,34 +105,6 @@
     -unity-background-image-tint-color: rgb(255, 255, 255);
 }
 
-.panel {
-    width: 30%;
-    height: 100%;
-    -unity-background-scale-mode: stretch-to-fill;
-    background-color: rgb(58, 58, 58);
-    position: absolute;
-    padding-top: 0;
-    padding-right: 5px;
-    padding-bottom: 55px;
-    padding-left: 5px;
-    max-width: 320px;
-}
-
-.panel-entry {
-    opacity: 1;
-    transition-property: opacity, display;
-    display: flex;
-    transition-duration: 0.2s, 0s;
-}
-
-.panel-exit {
-    opacity: 0;
-    transition-property: opacity, display;
-    transition-duration: 0.2s, 0s;
-    display: none;
-    transition-delay: 0s, 0.2s;
-}
-
 .no-zoom {
 }
 
@@ -156,4 +128,31 @@
     border-right-width: 4px;
     border-bottom-width: 4px;
     border-left-width: 4px;
+}
+
+.toolbar-button {
+    width: 26px;
+    height: 20px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.toolbar-button > .unity-image {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.undo-toolbar-button > .unity-image {
+    background-image: url("project://database/Assets/Skill%20Tree%20Graph/Sprites/Editor%20Icon/undo.png?fileID=2800000&guid=b6162b485f1f9314ea5a3113c23091ea&type=3#undo");
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.redo-toolbar-button > .unity-image {
+    background-image: url("project://database/Assets/Skill%20Tree%20Graph/Sprites/Editor%20Icon/redo.png?fileID=2800000&guid=4211542e8e378714dac6d98410373f53&type=3#redo");
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
 }

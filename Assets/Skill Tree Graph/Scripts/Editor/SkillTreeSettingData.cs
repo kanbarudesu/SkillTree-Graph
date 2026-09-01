@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace SkillTreeGraph.Editor
 {
-    [CreateAssetMenu(fileName = "SkillTreeSettingData", menuName = "SkillTreeGraph/SkillTreeSettingData")]
     public class SkillTreeSettingData : ScriptableObject
     {
         [Header("Skill Tree")]
@@ -26,13 +25,20 @@ namespace SkillTreeGraph.Editor
 
         [Header("Snap")]
         [SerializeField] private bool enableSnap = true;
-        [SerializeField] private float snapSize = 50f;
+        [SerializeField] private float snapSize = 25f;
 
         [Header("Other")]
         [SerializeField] private bool allowCtrlClickNodeCreation = true;
         [SerializeField] private bool autoSaveLoad = true;
 
         [SerializeField, HideInInspector] private string lastSavePath;
+
+        [HideInInspector] public Vector2 InspectorPanelPos;
+        [HideInInspector] public Vector2 InspectorPanelSize;
+        [HideInInspector] public bool IsInspectorPanelVisible = true;
+        [HideInInspector] public Vector2 SettingsPanelPos;
+        [HideInInspector] public Vector2 SettingsPanelSize;
+        [HideInInspector] public bool IsSettingPanelVisible;
 
         public string SkillTreeName => skillTreeName;
         public string Id => id;

@@ -7,46 +7,37 @@ namespace SkillTreeGraph.Editor
 {
     public class NodeOptionButtonController
     {
+        private readonly GraphContext _graphContext;
         private readonly GraphControllerContext _controllerContext;
         private readonly UndoManager _undoManager;
 
-        public NodeOptionButtonController(GraphControllerContext controllerContext, UndoManager undoManager)
+        public NodeOptionButtonController(GraphContext graphContext, GraphControllerContext controllerContext, UndoManager undoManager)
         {
+            _graphContext = graphContext;
             _controllerContext = controllerContext;
             _undoManager = undoManager;
         }
 
-        public void RegisterNodeButtons(VisualElement root, SkillNodeView node)
+        public void RegisterNodeButtons(SkillNodeView node)
         {
             var editButton = node.Q<VisualElement>("edit-button");
             var connectButton = node.Q<VisualElement>("connect-button");
             var disconnectButton = node.Q<VisualElement>("disconnect-button");
             var duplicateButton = node.Q<VisualElement>("duplicate-button");
             var removeButton = node.Q<VisualElement>("remove-button");
-            var inspectorPanel = root.Q<VisualElement>("node-inspector-panel");
 
-            editButton.RegisterCallback<PointerDownEvent>(evt => OnEditButtonClicked(node, inspectorPanel));
+            editButton.RegisterCallback<PointerDownEvent>(evt => OnEditButtonClicked(node));
             connectButton.RegisterCallback<PointerDownEvent>(evt => OnConnectButtonClicked(node));
             disconnectButton.RegisterCallback<PointerDownEvent>(evt => OnDisconnectButtonClicked(node));
             duplicateButton.RegisterCallback<PointerDownEvent>(evt => OnDuplicateButtonClicked(node));
-            removeButton.RegisterCallback<PointerDownEvent>(evt => OnRemoveButtonClicked(node, inspectorPanel));
+            removeButton.RegisterCallback<PointerDownEvent>(evt => OnRemoveButtonClicked(node));
         }
 
-        private ScrollView CreateInspectorContent()
+        private void OnEditButtonClicked(SkillNodeView nodeView)
         {
-            return new ScrollView
-            {
-                name = "inspector-content",
-                mode = ScrollViewMode.Vertical,
-                horizontalScrollerVisibility = ScrollerVisibility.Hidden
-            };
-        }
-
-        private void OnEditButtonClicked(SkillNodeView nodeView, VisualElement inspectorPanel)
-        {
-            inspectorPanel.Clear();
-            inspectorPanel.Add(BuildNodeInspector(nodeView));
-            inspectorPanel.RemoveFromClassList("panel-exit");
+            _graphContext.InspectorPanel.contentContainer.Clear();
+            _graphContext.InspectorPanel.contentContainer.Add(BuildNodeInspector(nodeView));
+            _graphContext.InspectorPanel.TogglePanelDisplay(true);
         }
 
         private void OnConnectButtonClicked(SkillNodeView nodeView)
@@ -63,10 +54,10 @@ namespace SkillTreeGraph.Editor
 
         private void OnDuplicateButtonClicked(SkillNodeView nodeView) => _undoManager.ExecuteCommand(new DuplicateNodeCommand(nodeView.Data));
 
-        private void OnRemoveButtonClicked(SkillNodeView nodeView, VisualElement inspectorPanel)
+        private void OnRemoveButtonClicked(SkillNodeView nodeView)
         {
             RemoveNode(nodeView);
-            inspectorPanel.Clear();
+            _graphContext.InspectorPanel.contentContainer.Clear();
         }
 
         private void RemoveNode(SkillNodeView nodeView) => _undoManager.ExecuteCommand(new RemoveNodeCommand(nodeView.Data));
@@ -78,7 +69,7 @@ namespace SkillTreeGraph.Editor
 
         private VisualElement BuildNodeInspector(SkillNodeView nodeView)
         {
-            var inspectorContent = CreateInspectorContent();
+            var inspectorContent = new VisualElement();
             var serializedObject = new SerializedObject(nodeView.Data);
 
             var onPropertyChanged = new Dictionary<string, Action>
@@ -90,7 +81,6 @@ namespace SkillTreeGraph.Editor
             SkillTreeEditorUtility.BuildInspectorElement(
                 inspectorContent,
                 serializedObject,
-                "Skill Node Setting",
                 ReadOnlyFieldPaths.Contains,
                 onPropertyChanged);
 

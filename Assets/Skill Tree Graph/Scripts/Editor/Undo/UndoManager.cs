@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace SkillTreeGraph.Editor
@@ -10,6 +11,8 @@ namespace SkillTreeGraph.Editor
         private readonly LinkedList<IUndoCommand> _undoList = new();
         private readonly LinkedList<IUndoCommand> _redoList = new();
         private readonly int _maxHistory;
+
+        public event Action<int, int> OnHistoryChanged;// (undoCount, redoCount)
 
         public UndoManager(GraphContext graphContext, GraphControllerContext controllerContext, int maxHistory = 20)
         {
@@ -29,6 +32,7 @@ namespace SkillTreeGraph.Editor
                 _undoList.RemoveFirst();
 
             _redoList.Clear();
+            NotifyHistoryChanged();
         }
 
         public void Undo()
@@ -41,6 +45,7 @@ namespace SkillTreeGraph.Editor
 
             command.Undo();
             _redoList.AddLast(command);
+            NotifyHistoryChanged();
         }
 
         public void Redo()
@@ -53,12 +58,16 @@ namespace SkillTreeGraph.Editor
 
             command.Execute();
             _undoList.AddLast(command);
+            NotifyHistoryChanged();
         }
 
         public void ClearHistory()
         {
             _undoList.Clear();
             _redoList.Clear();
+            NotifyHistoryChanged();
         }
+
+        public void NotifyHistoryChanged() => OnHistoryChanged?.Invoke(_undoList.Count, _redoList.Count);
     }
 }

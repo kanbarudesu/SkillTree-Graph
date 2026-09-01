@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SkillTreeGraph.Core;
@@ -12,7 +10,6 @@ namespace SkillTreeGraph.Editor
     {
         private readonly GraphContext _graphContext;
         private readonly GraphControllerContext _controllerContext;
-        private readonly Dictionary<string, Button> _buttons = new();
         private readonly ExampleSkillTreeProvider _exampleProvider = new();
 
         private string _currentSavePath;
@@ -23,29 +20,29 @@ namespace SkillTreeGraph.Editor
             _graphContext = graphContext;
             _controllerContext = controllerContext;
 
-            string[] buttonNames = { "save-assets-button", "save-button", "load-button", "random-button" };
-            foreach (var name in buttonNames)
-                _buttons[name] = graphContext.Root.Q<Button>(name);
-
-            ToggleEvents(true);
+            RegisterEvents();
             LoadInitialSaveData();
         }
 
-        private void ToggleEvents(bool register)
+        private void RegisterEvents()
         {
-            Action<Button, EventCallback<ClickEvent>> action = register
-                ? (btn, cb) => btn.RegisterCallback<ClickEvent>(cb)
-                : (btn, cb) => btn.UnregisterCallback<ClickEvent>(cb);
+            _graphContext.SaveAsAssetButton.RegisterCallback<ClickEvent>(OnSaveAssetsButtonClicked);
+            _graphContext.SaveButton.RegisterCallback<ClickEvent>(OnSaveButtonClicked);
+            _graphContext.LoadButton.RegisterCallback<ClickEvent>(OnLoadButtonClicked);
+            _graphContext.RandomTreeButton.RegisterCallback<ClickEvent>(OnRandomButtonClicked);
+        }
 
-            action(_buttons["save-assets-button"], OnSaveAssetsButtonClicked);
-            action(_buttons["save-button"], OnSaveButtonClicked);
-            action(_buttons["load-button"], OnLoadButtonClicked);
-            action(_buttons["random-button"], OnRandomButtonClicked);
+        private void UnregisterEvents()
+        {
+            _graphContext.SaveAsAssetButton.UnregisterCallback<ClickEvent>(OnSaveAssetsButtonClicked);
+            _graphContext.SaveButton.UnregisterCallback<ClickEvent>(OnSaveButtonClicked);
+            _graphContext.LoadButton.UnregisterCallback<ClickEvent>(OnLoadButtonClicked);
+            _graphContext.RandomTreeButton.UnregisterCallback<ClickEvent>(OnRandomButtonClicked);
         }
 
         public void Dispose()
         {
-            ToggleEvents(false);
+            UnregisterEvents();
             AutoSave();
         }
 
@@ -209,7 +206,7 @@ namespace SkillTreeGraph.Editor
         {
             var data = _exampleProvider.GetNext();
             if (data == null) return;
-            
+
             _isExampleSaveData = true;
             _currentSavePath = null;
             SkillTreeFileIO.Delete(ScratchSavePath);

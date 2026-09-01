@@ -8,15 +8,15 @@ namespace SkillTreeGraph.Editor
         private VisualElement _background;
         private VisualElement _selectedNode;
         private VisualElement _selectedOptionContainer;
-        private VisualElement _inspectorPanel;
+        private readonly GraphContext _graphContext;
         private readonly GraphInteractionController _interaction;
 
         public VisualElement SelectedNode => _selectedNode;
 
         public GraphSelectionController(GraphContext context, GraphInteractionController interaction)
         {
+            _graphContext = context;
             _background = context.GridBackground;
-            _inspectorPanel = context.Root.Q<VisualElement>("node-inspector-panel");
             _interaction = interaction;
             RegisterBackgroundClick();
         }
@@ -38,7 +38,7 @@ namespace SkillTreeGraph.Editor
 
         private void OnBackgroundClicked(PointerDownEvent evt)
         {
-            if (evt.target == _background)
+            if (evt.target == _background && evt.button != 2)
             {
                 ClearSelection();
                 _background.Focus();
@@ -83,7 +83,8 @@ namespace SkillTreeGraph.Editor
 
             _selectedNode = null;
             _selectedOptionContainer = null;
-            _inspectorPanel.AddToClassList("panel-exit");
+            
+            _graphContext.InspectorPanel.contentContainer.Clear();
         }
 
         public void Dispose()

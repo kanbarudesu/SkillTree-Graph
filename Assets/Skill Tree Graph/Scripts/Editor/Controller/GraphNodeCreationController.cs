@@ -86,7 +86,7 @@ namespace SkillTreeGraph.Editor
                 nodeView.Q<VisualElement>("option-button-container"),
                 () => _controllerContext.Interaction.OnNodeClicked(nodeView)
             );
-            _controllerContext.NodeOptionController.RegisterNodeButtons(_graphContext.Root, nodeView);
+            _controllerContext.NodeOptionController.RegisterNodeButtons(nodeView);
             _groupSelection.RegisterNode(nodeView, nodeView.Q<VisualElement>("main-button"));
 
             var dragManipulator = new NodeDragManipulator(_graphContext, nodeView, _groupSelection);

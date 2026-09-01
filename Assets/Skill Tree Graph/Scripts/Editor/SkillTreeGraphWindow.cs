@@ -1,7 +1,7 @@
 using System;
-using System.IO;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -16,6 +16,17 @@ namespace SkillTreeGraph.Editor
         public GridElement GridBackground;
         public SkillTreeSettingData Settings;
         public SkillTreeCollection Collection;
+
+        public InspectorPanel InspectorPanel;
+        public InspectorPanel SettingPanel;
+
+        public ToolbarButton NewTreeButton;
+        public ToolbarButton SaveAsAssetButton;
+        public ToolbarButton SaveButton;
+        public ToolbarButton LoadButton;
+        public ToolbarButton RandomTreeButton;
+        public ToolbarButton UndoButton;
+        public ToolbarButton RedoButton;
     }
 
     public class GraphControllerContext
@@ -35,7 +46,6 @@ namespace SkillTreeGraph.Editor
             GraphCam?.Dispose();
             Selection?.Dispose();
             GroupSelection?.Dispose();
-            SettingPanel?.Dispose();
             NodeCreation?.Dispose();
             Interaction?.Dispose();
             SaveLoad?.Dispose();
@@ -50,10 +60,6 @@ namespace SkillTreeGraph.Editor
         private readonly GraphControllerContext _controllerContext = new();
         private readonly GraphContext _graphContext = new();
         private UndoManager _undoManager;
-
-        private Button _newSkillTreeButton;
-        private Button _undoButton;
-        private Button _redoButton;
 
         private bool _isInitialized;
 
@@ -114,6 +120,7 @@ namespace SkillTreeGraph.Editor
             if (_isInitialized)
             {
                 _controllerContext.Dispose();
+                SaveInspectorAndSettingsPanelState();
                 _isInitialized = false;
             }
         }
@@ -132,28 +139,33 @@ namespace SkillTreeGraph.Editor
 
             try
             {
-                _graphContext.Settings = Resources.Load<SkillTreeSettingData>("Skill Tree Data/SkillTreeSettingData");
-                if (_graphContext.Settings == null)
+                var guids = AssetDatabase.FindAssets("t:SkillTreeSettingData");
+                if (guids.Length > 0)
+                {
+                    string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+                    _graphContext.Settings =
+                        AssetDatabase.LoadAssetAtPath<SkillTreeSettingData>(path);
+                }
+                else
                 {
                     _graphContext.Settings = CreateInstance<SkillTreeSettingData>();
 
-                    string folderPath = "Assets/Resources/Skill Tree Data";
-                    if (!AssetDatabase.IsValidFolder(folderPath))
-                    {
-                        Directory.CreateDirectory(folderPath);
-                        AssetDatabase.Refresh();
-                    }
+                    string folderPath = "Assets/Skill Tree Graph/Settings";
+                    string assetPath = folderPath + "/SkillTreeSettingData.asset";
 
-                    AssetDatabase.CreateAsset(_graphContext.Settings, $"{folderPath}/SkillTreeSettingData.asset");
+                    SkillTreeEditorUtility.EnsureFolderExists(folderPath);
+
+                    AssetDatabase.CreateAsset(_graphContext.Settings, assetPath);
                     AssetDatabase.SaveAssets();
                     AssetDatabase.Refresh();
-
-                    Debug.Log("Created SkillTreeSettingData.asset in " + folderPath);
                 }
 
                 InitializeGraphElements();
 
                 _undoManager = new UndoManager(_graphContext, _controllerContext);
+                _undoManager.OnHistoryChanged += UpdateUndoRedoButtons;
+                _undoManager.NotifyHistoryChanged();
+
                 _graphContext.Collection = SkillTreeEditorUtility.CreateTransientInstance<SkillTreeCollection>();
 
                 _controllerContext.GraphCam = new GraphCameraController(_graphContext);
@@ -163,20 +175,16 @@ namespace SkillTreeGraph.Editor
                 _controllerContext.GroupSelection = new NodeGroupSelectionController(_graphContext, _controllerContext.Interaction);
                 _controllerContext.NodeCreation = new GraphNodeCreationController(_graphContext, _controllerContext, _controllerContext.GroupSelection, _undoManager, NodeButtonTemplateTree);
                 _controllerContext.Selection = new GraphSelectionController(_graphContext, _controllerContext.Interaction);
-                _controllerContext.NodeOptionController = new NodeOptionButtonController(_controllerContext, _undoManager);
+                _controllerContext.NodeOptionController = new NodeOptionButtonController(_graphContext, _controllerContext, _undoManager);
                 _controllerContext.SaveLoad = new SkillSaveLoadController(_graphContext, _controllerContext);
 
                 _graphContext.GridBackground.RegisterCallback<KeyDownEvent>(OnBackgroundKeyDown, TrickleDown.TrickleDown);
                 _graphContext.GridBackground.RegisterCallback<KeyUpEvent>(OnBackgroundKeyUp, TrickleDown.TrickleDown);
 
-                _undoButton = rootVisualElement.Q<Button>("undo-button");
-                _undoButton.clicked += _undoManager.Undo;
-
-                _redoButton = rootVisualElement.Q<Button>("redo-button");
-                _redoButton.clicked += _undoManager.Redo;
-
-                _newSkillTreeButton = rootVisualElement.Q<Button>("new-skill-tree-button");
-                _newSkillTreeButton.clicked += InitializeNewSkillTree;
+                _graphContext.UndoButton.clicked += _undoManager.Undo;
+                _graphContext.RedoButton.clicked += _undoManager.Redo;
+                _graphContext.RandomTreeButton.clicked += _undoManager.ClearHistory;
+                _graphContext.NewTreeButton.clicked += InitializeNewSkillTree;
 
                 _isInitialized = true;
             }
@@ -186,6 +194,12 @@ namespace SkillTreeGraph.Editor
                 _controllerContext.Dispose();
                 rootVisualElement.Clear();
             }
+        }
+
+        private void UpdateUndoRedoButtons(int undoCount, int redoCount)
+        {
+            _graphContext.UndoButton.SetEnabled(undoCount > 0);
+            _graphContext.RedoButton.SetEnabled(redoCount > 0);
         }
 
         private void ShowPlayModeMessage()
@@ -289,10 +303,127 @@ namespace SkillTreeGraph.Editor
             _graphContext.ConnectionContainer.style.right = 0;
             _graphContext.ConnectionContainer.style.bottom = 0;
 
+            InitializeToolbar();
+
             var gridContainer = rootVisualElement.Q<VisualElement>("grid-background-container");
             gridContainer.Add(_graphContext.GridBackground);
             _graphContext.GraphContent.Add(_graphContext.ConnectionContainer);
             _graphContext.GraphContent.Add(_graphContext.NodeContainer);
+        }
+
+        private void InitializeToolbar()
+        {
+            var skillTreeRoot = rootVisualElement.Q<VisualElement>("skill-tree-root");
+            _graphContext.InspectorPanel = new InspectorPanel("Graph Inspector", new Vector2(330, 370), PanelCorner.TopRight);
+            _graphContext.InspectorPanel.AddToClassList("no-zoom");
+            _graphContext.InspectorPanel.style.display = _graphContext.Settings.IsInspectorPanelVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            skillTreeRoot.Add(_graphContext.InspectorPanel);
+
+            _graphContext.SettingPanel = new InspectorPanel("Graph Settings", new Vector2(330, 370), PanelCorner.TopLeft);
+            _graphContext.SettingPanel.AddToClassList("no-zoom");
+            _graphContext.SettingPanel.style.display = _graphContext.Settings.IsSettingPanelVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            skillTreeRoot.Add(_graphContext.SettingPanel);
+
+            LoadInspectorAndSettingsPanelState();
+
+            Toolbar toolbar = new Toolbar();
+            toolbar.AddToClassList("no-zoom");
+            rootVisualElement.Insert(0, toolbar);
+
+            _graphContext.NewTreeButton = new ToolbarButton() { tooltip = "Generate New Skill Tree", iconImage = EditorGUIUtility.IconContent("CreateAddNew").image as Texture2D };
+            _graphContext.NewTreeButton.AddToClassList("toolbar-button");
+            toolbar.Add(_graphContext.NewTreeButton);
+
+            _graphContext.SaveAsAssetButton = new ToolbarButton() { tooltip = "Save Skill Tree As Asset", iconImage = EditorGUIUtility.IconContent("ScriptableObject Icon").image as Texture2D };
+            _graphContext.SaveAsAssetButton.AddToClassList("toolbar-button");
+            toolbar.Add(_graphContext.SaveAsAssetButton);
+
+            _graphContext.SaveButton = new ToolbarButton() { tooltip = "Save Skill Tree to Json", iconImage = EditorGUIUtility.IconContent("SaveAs").image as Texture2D };
+            _graphContext.SaveButton.AddToClassList("toolbar-button");
+            toolbar.Add(_graphContext.SaveButton);
+
+            _graphContext.LoadButton = new ToolbarButton() { tooltip = "Load Skill Tree from Json", iconImage = EditorGUIUtility.IconContent("FolderOpened Icon").image as Texture2D };
+            _graphContext.LoadButton.AddToClassList("toolbar-button");
+            toolbar.Add(_graphContext.LoadButton);
+
+            _graphContext.RandomTreeButton = new ToolbarButton() { tooltip = "Load Random Skill Tree Example", iconImage = EditorGUIUtility.IconContent("AudioRandomContainer On Icon").image as Texture2D };
+            _graphContext.RandomTreeButton.AddToClassList("toolbar-button");
+            toolbar.Add(_graphContext.RandomTreeButton);
+
+            _graphContext.UndoButton = new ToolbarButton() { tooltip = "Undo" };
+            _graphContext.UndoButton.AddToClassList("undo-toolbar-button");
+            var undoButtonImage = new Image();
+            undoButtonImage.style.unityBackgroundImageTintColor = EditorGUIUtility.isProSkin ? Color.white : Color.black;
+            _graphContext.UndoButton.Add(undoButtonImage);
+            toolbar.Add(_graphContext.UndoButton);
+
+            _graphContext.RedoButton = new ToolbarButton() { tooltip = "Redo" };
+            _graphContext.RedoButton.AddToClassList("redo-toolbar-button");
+            var redoButtonImage = new Image();
+            redoButtonImage.style.unityBackgroundImageTintColor = EditorGUIUtility.isProSkin ? Color.white : Color.black;
+            _graphContext.RedoButton.Add(redoButtonImage);
+            toolbar.Add(_graphContext.RedoButton);
+
+            var rightContainer = new VisualElement();
+            rightContainer.style.flexDirection = FlexDirection.Row;
+            rightContainer.style.marginLeft = StyleKeyword.Auto;
+            toolbar.Add(rightContainer);
+
+            var inspectorButton = new ToolbarToggle() { tooltip = "Show Graph Inspector" };
+            var inspectorButtonImage = new Image();
+            inspectorButton.AddToClassList("toolbar-button");
+            inspectorButtonImage.style.backgroundImage = EditorGUIUtility.IconContent("UnityEditor.InspectorWindow").image as Texture2D;
+            inspectorButton.Add(inspectorButtonImage);
+            inspectorButton.value = _graphContext.Settings.IsInspectorPanelVisible;
+            inspectorButton.RegisterValueChangedCallback(OnInspectorButtonToggled);
+            rightContainer.Add(inspectorButton);
+
+            var settingButton = new ToolbarToggle() { tooltip = "Show Graph Settings" };
+            var settingButtonImage = new Image();
+            settingButton.AddToClassList("toolbar-button");
+            settingButtonImage.style.backgroundImage = EditorGUIUtility.IconContent("Settings Icon").image as Texture2D;
+            settingButton.Add(settingButtonImage);
+            settingButton.value = _graphContext.Settings.IsSettingPanelVisible;
+            settingButton.RegisterValueChangedCallback(OnSettingButtonToggled);
+            rightContainer.Add(settingButton);
+        }
+
+        private void OnSettingButtonToggled(ChangeEvent<bool> evt)
+        {
+            _graphContext.Settings.IsSettingPanelVisible = evt.newValue;
+            _graphContext.SettingPanel.style.display = evt.newValue ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        private void OnInspectorButtonToggled(ChangeEvent<bool> evt)
+        {
+            _graphContext.Settings.IsInspectorPanelVisible = evt.newValue;
+            _graphContext.InspectorPanel.style.display = evt.newValue ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        private void SaveInspectorAndSettingsPanelState()
+        {
+            var inspectorPanelStyle = _graphContext.InspectorPanel.style;
+            _graphContext.Settings.InspectorPanelPos = new Vector2(inspectorPanelStyle.left.value.value, inspectorPanelStyle.top.value.value);
+            _graphContext.Settings.InspectorPanelSize = new Vector2(inspectorPanelStyle.width.value.value, inspectorPanelStyle.height.value.value);
+
+            var settingsPanelStyle = _graphContext.SettingPanel.style;
+            _graphContext.Settings.SettingsPanelPos = new Vector2(settingsPanelStyle.left.value.value, settingsPanelStyle.top.value.value);
+            _graphContext.Settings.SettingsPanelSize = new Vector2(settingsPanelStyle.width.value.value, settingsPanelStyle.height.value.value);
+        }
+
+        private void LoadInspectorAndSettingsPanelState()
+        {
+            if (_graphContext.Settings.InspectorPanelPos == Vector2.zero && _graphContext.Settings.SettingsPanelPos == Vector2.zero) return;
+
+            _graphContext.InspectorPanel.style.left = _graphContext.Settings.InspectorPanelPos.x;
+            _graphContext.InspectorPanel.style.top = _graphContext.Settings.InspectorPanelPos.y;
+            _graphContext.InspectorPanel.style.width = _graphContext.Settings.InspectorPanelSize.x;
+            _graphContext.InspectorPanel.style.height = _graphContext.Settings.InspectorPanelSize.y;
+
+            _graphContext.SettingPanel.style.left = _graphContext.Settings.SettingsPanelPos.x;
+            _graphContext.SettingPanel.style.top = _graphContext.Settings.SettingsPanelPos.y;
+            _graphContext.SettingPanel.style.width = _graphContext.Settings.SettingsPanelSize.x;
+            _graphContext.SettingPanel.style.height = _graphContext.Settings.SettingsPanelSize.y;
         }
 
         private void InitializeNewSkillTree()
