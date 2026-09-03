@@ -52,6 +52,12 @@ namespace SkillTreeGraph.Editor
         }
     }
 
+    class PanelViewSettings
+    {
+        public bool IsInspectorVisible = true;
+        public bool IsSettingVisible = false;
+    }
+
     public class SkillTreeGraphWindow : EditorWindow
     {
         public VisualTreeAsset SkillTreeEditorTree;
@@ -61,6 +67,9 @@ namespace SkillTreeGraph.Editor
         private readonly GraphContext _graphContext = new();
         private UndoManager _undoManager;
 
+        private PanelViewSettings _panelViewSettings;
+        private const string k_PanelViewSettings = "PanelViewSettings";
+
         private bool _isInitialized;
 
         [MenuItem("Tools/Skill Tree Window")]
@@ -68,7 +77,7 @@ namespace SkillTreeGraph.Editor
         {
             var window = GetWindow<SkillTreeGraphWindow>();
             window.titleContent = new GUIContent("Skill Tree Editor");
-            window.minSize = new Vector2(1280, 720);
+            window.minSize = new Vector2(640, 360);
         }
 
         private void OnEnable()
@@ -120,7 +129,7 @@ namespace SkillTreeGraph.Editor
             if (_isInitialized)
             {
                 _controllerContext.Dispose();
-                SaveInspectorAndSettingsPanelState();
+                rootVisualElement.UnregisterCallback<GeometryChangedEvent>(UpdatePanelDockingLayout);
                 _isInitialized = false;
             }
         }
@@ -313,18 +322,21 @@ namespace SkillTreeGraph.Editor
 
         private void InitializeToolbar()
         {
+            var serializedSettings = EditorUserSettings.GetConfigValue(k_PanelViewSettings);
+            _panelViewSettings = JsonUtility.FromJson<PanelViewSettings>(serializedSettings) ?? new PanelViewSettings();
+
             var skillTreeRoot = rootVisualElement.Q<VisualElement>("skill-tree-root");
             _graphContext.InspectorPanel = new InspectorPanel("Graph Inspector", new Vector2(330, 370), PanelCorner.TopRight);
             _graphContext.InspectorPanel.AddToClassList("no-zoom");
-            _graphContext.InspectorPanel.style.display = _graphContext.Settings.IsInspectorPanelVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            _graphContext.InspectorPanel.DeserializeLayout();
+            _graphContext.InspectorPanel.style.display = _panelViewSettings.IsInspectorVisible ? DisplayStyle.Flex : DisplayStyle.None;
             skillTreeRoot.Add(_graphContext.InspectorPanel);
 
             _graphContext.SettingPanel = new InspectorPanel("Graph Settings", new Vector2(330, 370), PanelCorner.TopLeft);
             _graphContext.SettingPanel.AddToClassList("no-zoom");
-            _graphContext.SettingPanel.style.display = _graphContext.Settings.IsSettingPanelVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            _graphContext.SettingPanel.DeserializeLayout();
+            _graphContext.SettingPanel.style.display = _panelViewSettings.IsSettingVisible ? DisplayStyle.Flex : DisplayStyle.None;
             skillTreeRoot.Add(_graphContext.SettingPanel);
-
-            LoadInspectorAndSettingsPanelState();
 
             Toolbar toolbar = new Toolbar();
             toolbar.AddToClassList("no-zoom");
@@ -374,7 +386,7 @@ namespace SkillTreeGraph.Editor
             inspectorButton.AddToClassList("toolbar-button");
             inspectorButtonImage.style.backgroundImage = EditorGUIUtility.IconContent("UnityEditor.InspectorWindow").image as Texture2D;
             inspectorButton.Add(inspectorButtonImage);
-            inspectorButton.value = _graphContext.Settings.IsInspectorPanelVisible;
+            inspectorButton.value = _panelViewSettings.IsInspectorVisible;
             inspectorButton.RegisterValueChangedCallback(OnInspectorButtonToggled);
             rightContainer.Add(inspectorButton);
 
@@ -383,47 +395,39 @@ namespace SkillTreeGraph.Editor
             settingButton.AddToClassList("toolbar-button");
             settingButtonImage.style.backgroundImage = EditorGUIUtility.IconContent("Settings Icon").image as Texture2D;
             settingButton.Add(settingButtonImage);
-            settingButton.value = _graphContext.Settings.IsSettingPanelVisible;
+            settingButton.value = _panelViewSettings.IsSettingVisible;
             settingButton.RegisterValueChangedCallback(OnSettingButtonToggled);
             rightContainer.Add(settingButton);
+
+            rootVisualElement.RegisterCallback<GeometryChangedEvent>(UpdatePanelDockingLayout);
         }
 
         private void OnSettingButtonToggled(ChangeEvent<bool> evt)
         {
-            _graphContext.Settings.IsSettingPanelVisible = evt.newValue;
             _graphContext.SettingPanel.style.display = evt.newValue ? DisplayStyle.Flex : DisplayStyle.None;
+            _graphContext.SettingPanel.DeserializeLayout();
+            _panelViewSettings.IsSettingVisible = evt.newValue;
+            SerializePanelViewSettings();
         }
 
         private void OnInspectorButtonToggled(ChangeEvent<bool> evt)
         {
-            _graphContext.Settings.IsInspectorPanelVisible = evt.newValue;
             _graphContext.InspectorPanel.style.display = evt.newValue ? DisplayStyle.Flex : DisplayStyle.None;
+            _graphContext.InspectorPanel.DeserializeLayout();
+            _panelViewSettings.IsInspectorVisible = evt.newValue;
+            SerializePanelViewSettings();
         }
 
-        private void SaveInspectorAndSettingsPanelState()
+        private void SerializePanelViewSettings()
         {
-            var inspectorPanelStyle = _graphContext.InspectorPanel.style;
-            _graphContext.Settings.InspectorPanelPos = new Vector2(inspectorPanelStyle.left.value.value, inspectorPanelStyle.top.value.value);
-            _graphContext.Settings.InspectorPanelSize = new Vector2(inspectorPanelStyle.width.value.value, inspectorPanelStyle.height.value.value);
-
-            var settingsPanelStyle = _graphContext.SettingPanel.style;
-            _graphContext.Settings.SettingsPanelPos = new Vector2(settingsPanelStyle.left.value.value, settingsPanelStyle.top.value.value);
-            _graphContext.Settings.SettingsPanelSize = new Vector2(settingsPanelStyle.width.value.value, settingsPanelStyle.height.value.value);
+            var serializedViewSettings = JsonUtility.ToJson(_panelViewSettings);
+            EditorUserSettings.SetConfigValue(k_PanelViewSettings, serializedViewSettings);
         }
 
-        private void LoadInspectorAndSettingsPanelState()
+        private void UpdatePanelDockingLayout(GeometryChangedEvent evt)
         {
-            if (_graphContext.Settings.InspectorPanelPos == Vector2.zero && _graphContext.Settings.SettingsPanelPos == Vector2.zero) return;
-
-            _graphContext.InspectorPanel.style.left = _graphContext.Settings.InspectorPanelPos.x;
-            _graphContext.InspectorPanel.style.top = _graphContext.Settings.InspectorPanelPos.y;
-            _graphContext.InspectorPanel.style.width = _graphContext.Settings.InspectorPanelSize.x;
-            _graphContext.InspectorPanel.style.height = _graphContext.Settings.InspectorPanelSize.y;
-
-            _graphContext.SettingPanel.style.left = _graphContext.Settings.SettingsPanelPos.x;
-            _graphContext.SettingPanel.style.top = _graphContext.Settings.SettingsPanelPos.y;
-            _graphContext.SettingPanel.style.width = _graphContext.Settings.SettingsPanelSize.x;
-            _graphContext.SettingPanel.style.height = _graphContext.Settings.SettingsPanelSize.y;
+            _graphContext.InspectorPanel.ClampToParentLayout(rootVisualElement.layout);
+            _graphContext.SettingPanel.ClampToParentLayout(rootVisualElement.layout);
         }
 
         private void InitializeNewSkillTree()

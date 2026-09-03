@@ -33,13 +33,6 @@ namespace SkillTreeGraph.Editor
 
         [SerializeField, HideInInspector] private string lastSavePath;
 
-        [HideInInspector] public Vector2 InspectorPanelPos;
-        [HideInInspector] public Vector2 InspectorPanelSize;
-        [HideInInspector] public bool IsInspectorPanelVisible = true;
-        [HideInInspector] public Vector2 SettingsPanelPos;
-        [HideInInspector] public Vector2 SettingsPanelSize;
-        [HideInInspector] public bool IsSettingPanelVisible;
-
         public string SkillTreeName => skillTreeName;
         public string Id => id;
         public float NodeSize => defaultNodeSize;

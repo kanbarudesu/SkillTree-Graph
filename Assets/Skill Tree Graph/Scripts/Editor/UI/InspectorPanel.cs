@@ -16,15 +16,14 @@ namespace SkillTreeGraph.Editor
     [UxmlElement]
     public partial class InspectorPanel : VisualElement
     {
-        public static readonly string ussClassName = "inspector-panel";
-        public static readonly string hidePanelUssClassName = ussClassName + "__hide-panel";
-        public static readonly string titleBarUssClassName = ussClassName + "__titlebar";
-        public static readonly string titleLabelUssClassName = ussClassName + "__title-label";
-        public static readonly string titleHideButtonUssClassName = ussClassName + "__title-hide-button";
-        public static readonly string scrollViewUssClassName = ussClassName + "__scrollview";
-        public static readonly string contentUssClassName = ussClassName + "__content";
-        public static readonly string templateContainerUssClassName = ussClassName + "__template-container";
-
+        const string ussClassName = "inspector-panel";
+        const string hidePanelUssClassName = ussClassName + "__hide-panel";
+        const string titleBarUssClassName = ussClassName + "__titlebar";
+        const string titleLabelUssClassName = ussClassName + "__title-label";
+        const string titleHideButtonUssClassName = ussClassName + "__title-hide-button";
+        const string scrollViewUssClassName = ussClassName + "__scrollview";
+        const string contentUssClassName = ussClassName + "__content";
+        const string templateContainerUssClassName = ussClassName + "__template-container";
         const string k_StyleSheetName = "InspectorPanel";
 
         public static readonly Vector2 defaultSize = new Vector2(320, 500);
@@ -37,8 +36,15 @@ namespace SkillTreeGraph.Editor
         readonly ScrollView _scrollView;
         readonly ResizableElement _resizableElement;
 
-        PanelCorner _corner = PanelCorner.TopLeft;
         bool _isPanelVisible = true;
+
+        protected PanelDockingLayout panelDockingLayout { get; private set; } = new PanelDockingLayout
+        {
+            DockingTop = true,
+            DockingLeft = false,
+            VerticalOffset = 8,
+            HorizontalOffset = 8,
+        };
 
         [UxmlAttribute]
         public string title
@@ -51,19 +57,6 @@ namespace SkillTreeGraph.Editor
         {
             get => new Vector2(resolvedStyle.width, resolvedStyle.height);
             set => SetSize(value);
-        }
-
-        public PanelCorner Corner
-        {
-            get => _corner;
-            set
-            {
-                if (_corner == value)
-                    return;
-
-                _corner = value;
-                ApplyCorner();
-            }
         }
 
         public override VisualElement contentContainer => _scrollView.contentContainer;
@@ -106,6 +99,7 @@ namespace SkillTreeGraph.Editor
             _scrollView.contentContainer.AddToClassList(contentUssClassName);
 
             _resizableElement = new ResizableElement { name = "resize-handles" };
+            _resizableElement.RegisterCallback<GeometryChangedEvent>((_) => SerializeLayout());
 
             _templateContainer.Add(titleBar);
             _templateContainer.Add(_scrollView);
@@ -113,7 +107,8 @@ namespace SkillTreeGraph.Editor
             hierarchy.Add(_resizableElement);
 
             SetSize(initialSize);
-            Corner = corner;
+            InitializePanelCorner(corner);
+            RegisterCallback<MouseUpEvent>(OnMoveEnd);
         }
 
         public void TogglePanelDisplay(bool isShowing)
@@ -131,14 +126,64 @@ namespace SkillTreeGraph.Editor
             }
         }
 
-        private void ApplyCorner()
+        public void ClampToParentLayout(Rect parentLayout)
+        {
+            panelDockingLayout.CalculateDockingCornerAndOffset(layout, parentLayout);
+            panelDockingLayout.ClampToParentWindow();
+
+            // If the parent window is being resized smaller than this window on either axis
+            if (parentLayout.width < this.layout.width || parentLayout.height < this.layout.height)
+            {
+                // Don't adjust the sub window in this case as it causes flickering errors and looks broken
+            }
+            else
+            {
+                panelDockingLayout.ApplyPosition(this);
+            }
+
+            SerializeLayout();
+        }
+
+        public void DeserializeLayout()
+        {
+            var serializedLayout = EditorUserSettings.GetConfigValue(_titleLabel.text);
+            if (!string.IsNullOrEmpty(serializedLayout))
+                panelDockingLayout = JsonUtility.FromJson<PanelDockingLayout>(serializedLayout);
+            else
+            {
+                panelDockingLayout.Size = defaultSize;
+                return;
+            }
+
+            panelDockingLayout.ApplySize(this);
+            panelDockingLayout.ApplyPosition(this);
+        }
+
+        private void SerializeLayout()
+        {
+            if (style.display == DisplayStyle.None) return;
+
+            panelDockingLayout.Size = layout.size;
+            var serializedLayout = JsonUtility.ToJson(panelDockingLayout);
+            EditorUserSettings.SetConfigValue(_titleLabel.text, serializedLayout);
+        }
+
+        private void OnMoveEnd(MouseUpEvent evt)
+        {
+            panelDockingLayout.CalculateDockingCornerAndOffset(layout, parent.layout);
+            panelDockingLayout.ClampToParentWindow();
+
+            SerializeLayout();
+        }
+
+        private void InitializePanelCorner(PanelCorner corner)
         {
             style.left = StyleKeyword.Auto;
             style.right = StyleKeyword.Auto;
             style.top = StyleKeyword.Auto;
             style.bottom = StyleKeyword.Auto;
 
-            switch (_corner)
+            switch (corner)
             {
                 case PanelCorner.TopLeft:
                     style.left = 0;
@@ -171,7 +216,7 @@ namespace SkillTreeGraph.Editor
             style.height = size.y;
         }
 
-        private static StyleSheet FindStyleSheet()
+        private StyleSheet FindStyleSheet()
         {
             if (_cachedStyleSheet != null)
                 return _cachedStyleSheet;
